@@ -1,6 +1,10 @@
 #ifndef __DEFS_H__
 #define __DEFS_H__
 
+#include <cstddef>
+
+#define BufLength 81
+
 #define TextLineLength 80
 #define MemSize 20
 
@@ -16,9 +20,9 @@
 #define TextError -102
 #define TextNoMem -101
 
-#define NULL nullptr
+#define DelMark "&&&"
 
-struct TTextMem;
+class TTextMem;
 class TTextLink;
 class TDatValue;
 class TText;

@@ -1,42 +1,73 @@
 #include "../include/ttextlink.h"
+#include "../include/ttextmem.h"
+#include "../include/ttext.h"
 
-void TTextLink::InitMemSystem(int size)
-{
-  PTTextLink pLink = MemHeader.pFree = MemHeader.pFirst
-      = ::new TTextLink[size];
-  MemHeader.pLast = MemHeader.pFirst + size - 1;
+PTTextMem TTextLink::pCurrMemControl = NULL;
 
-  for(int i = 0; i < size - 1; ++i, ++pLink)
-    pLink->pNext = pLink + 1;
+void TTextLink::SetMemControl(PTTextMem mc)
+{ pCurrMemControl = mc; }
 
-  pLink->pNext = NULL;
-}
+TTextLink::TTextLink(const TStr s, PTTextLink pn, PTTextLink pd)
+    : refCount(0), pNext(pn), pDown(pd), pMemControl(pCurrMemControl)
+{ strcpy(Str, s); }
 
-void TTextLink::PrintFreeLink()
-{
-}
+TTextLink::~TTextLink(){}
 
-void TTextLink::MemCleaner(const TText &txt)
-{
-  
-}
 
 void *TTextLink::operator new(std::size_t)
 {
-  PTTextLink pLink = MemHeader.pFree;
+  PTTextLink pLink = NULL;
+  if(pCurrMemControl == NULL)
+  {
+    throw TextNoMem;
+  }
+  else
+  {
+    pLink = pCurrMemControl->pFree;
+    if(pLink == NULL)
+      throw TextNoMem;
+    else
+      pCurrMemControl->pFree = pLink->pNext;
+  }
 
-  if(MemHeader.pFree)
-    MemHeader.pFree = MemHeader.pFree->pNext;
+  pCurrMemControl = NULL;
 
   return pLink;
 }
 
-void TTextLink::operator delete(void *pM)
+void TTextLink::operator delete(void *pM) noexcept(false)
 {
   PTTextLink pLink = static_cast<PTTextLink>(pM);
 
-  pLink->pNext = MemHeader.pFree;
-  MemHeader.pFree = pLink;
+  if(pLink == NULL)
+  {
+    throw TextError;
+  }
+  else
+  {
+    pLink->pNext = pLink->pMemControl->pFree;
+    pLink->pMemControl->pFree = pLink;
+  }
 }
 
+bool TTextLink::IsAtom() const
+{ return pDown == NULL; }
+
+PTTextLink TTextLink::GetNext() const
+{ return pNext; }
+
+PTTextLink TTextLink::GetDown() const
+{ return pDown; }
+
+PTTextLink TTextLink::GetCopy(PTTextMem mc) const
+{
+  if(mc == NULL)
+    mc = pMemControl;
+
+  pCurrMemControl = mc;
+  return new TTextLink(Str, pNext, pDown);
+}
+
+void TTextLink::Print(std::ostream &os) const
+{ os << Str << std::endl; }
 

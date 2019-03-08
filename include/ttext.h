@@ -4,11 +4,15 @@
 #include <fstream>
 #include <stack>
 #include <string>
+#include "defines.h"
 #include "tdatacom.h"
+#include "ttextmem.h"
 
 class TText: public TDataCom
 {
-protected:
+private:
+  TTextMem MemControl;
+
   PTTextLink pFirst;
   PTTextLink pCurrent;
   std::stack<PTTextLink> Path; // exclude pCurrent
@@ -17,10 +21,12 @@ protected:
   PTTextLink GetFirstAtom(PTTextLink pl);
   void PrintText(PTTextLink ptl);
   PTTextLink ReadText(std::ifstream &TxtFile);
+
+  PTTextLink CreateLink(
+      const TStr s=NULL, PTTextLink pn=NULL, PTTextLink pd=NULL);
 public:
   TText(PTTextLink pl=NULL);
-  virtual ~TText()
-  { pFirst = NULL; }
+  virtual ~TText();
 
   PTText GetCopy();
 

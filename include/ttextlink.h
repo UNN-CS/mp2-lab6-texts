@@ -4,49 +4,34 @@
 #include <cstring>
 #include <iostream>
 #include "defines.h"
-#include "tdatvalue.h"
-#include "ttextmem.h"
 
 
-class TTextLink: public TDatValue
+class TTextLink
 {
-protected:
-  TStr Str;
-  PTTextLink pNext, pDown;
-  static TTextMem MemHeader;
+private:
+  int refCount;
+  static PTTextMem pCurrMemControl;
 
 public:
-  static void InitMemSystem(int size=MemSize);
-  static void PrintFreeLink();
-  static void MemCleaner(const TText &txt);
+  TStr Str;
+  PTTextLink pNext, pDown;
+  PTTextMem pMemControl;
 
-  TTextLink(const TStr s=NULL, PTTextLink pn=NULL, PTTextLink pd=NULL)
-    : pNext(pn), pDown(pd)
-  {
-    if(s != NULL)
-      strcpy(Str, s);
-    else
-      Str[0]='\0';
-  }
-  virtual ~TTextLink(){}
+  TTextLink(const TStr s=NULL, PTTextLink pn=NULL, PTTextLink pd=NULL);
+  virtual ~TTextLink();
 
-  void *operator new(std::size_t);
-  void operator delete(void *pM);
+  static void *operator new(std::size_t);
+  static void operator delete(void *pM) noexcept(false);
+  static void SetMemControl(PTTextMem mc);
 
-  int IsAtom()
-  { return pDown == NULL; }
-  PTTextLink GetNext()
-  { return pNext; }
-  PTTextLink GetDown()
-  { return pDown; }
-  virtual TDatValue* GetCopy() const override
-  { return new TTextLink(Str, pNext, pDown); }
+  bool IsAtom() const;
+  PTTextLink GetNext() const;
+  PTTextLink GetDown() const;
+  PTTextLink GetCopy(PTTextMem mc=NULL) const;
 
-protected:
-  virtual void Print(std::ostream &os)
-  { os << Str; }
+  virtual void Print(std::ostream &os) const;
 
-  friend class TText;
+  friend class TTextMem;
 };
 
 #endif
