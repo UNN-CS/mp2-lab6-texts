@@ -3,6 +3,14 @@
 
 PTTextLink TText::GetFirstAtom(PTTextLink pl)
 {
+  PTTextLink pLink = pl;
+  while(!pLink->IsAtom())
+  {
+    St.push(pLink);
+    pLink = pLink->GetDown();
+  }
+
+  return pLink;
 }
 
 void TText::PrintText(PTTextLink ptl)
@@ -12,17 +20,13 @@ void TText::PrintText(PTTextLink ptl)
   std::stack<PTTextLink> tstack;
   PTTextLink pLink = ptl;
 
-  while(true)
+  while(pLink != NULL)
   {
     for(int i = 0; i < lvl; ++i)
       std::cout << indent;
-    std::cout << ptl->Str << '\n';
+    std::cout << ptl->Str << std::endl;
 
-    if(pLink == NULL)
-    {
-      break;
-    }
-    else if(pLink->pDown != NULL)
+    if(pLink->pDown != NULL)
     {
       tstack.push(pLink);
       pLink = pLink->pDown;
@@ -45,6 +49,22 @@ void TText::PrintText(PTTextLink ptl)
     }
   }
 }
+
+/*
+ * Using recursion
+void TText::PrintText(PTTextLink ptl, textLevel=0)
+{
+  const char *indent = "  ";
+  if(ptl != NULL)
+  {
+    for(int i = 0; i < textLevel; ++i)
+      std::cout << indent;
+    std::cout << ptl->Str << std::endl;
+    PrintText(ptl->pDown, textLevel + 1);
+    PrintText(ptl->pNext, textLevel);
+  }
+}
+*/
 
 PTTextLink TText::ReadText(std::ifstream &TxtFile)
 {
