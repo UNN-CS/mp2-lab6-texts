@@ -39,12 +39,16 @@ void TText::PrintText(PTTextLink ptl)
     }
     else
     {
-      while(tstack.top()->pNext == pLink)
+      while(!tstack.empty()
+          && (tstack.top()->pNext == pLink || tstack.top()->pNext == NULL))
       {
         pLink = tstack.top();
         tstack.pop();
       }
-      pLink = tstack.top()->pNext;
+      if(tstack.empty())
+        pLink = NULL;
+      else
+        pLink = tstack.top()->pNext;
       --lvl;
     }
   }
@@ -68,6 +72,7 @@ void TText::PrintText(PTTextLink ptl, textLevel=0)
 
 PTTextLink TText::ReadText(std::ifstream &TxtFile)
 {
+
 }
 
 PTTextLink TText::CreateLink(const TStr s, PTTextLink pn, PTTextLink pd)
@@ -84,9 +89,7 @@ PTTextLink TText::CreateLink(const TStr s, PTTextLink pn, PTTextLink pd)
 TText::TText(PTTextLink pl)
 {
   if(pl == NULL)
-  {
     pl = CreateLink();
-  }
 
   pFirst = pl;
   pFirst->refCount += 1;
@@ -154,16 +157,46 @@ void TText::DelNextSection()
 {
 }
 
-int TText::Reset()
+void TText::Reset()
 {
+  pCurrent = pFirst;
+  while(!St.empty())
+    St.pop();
 }
 
 bool TText::IsTextEnded() const
-{
-}
+{ return pCurrent == NULL; }
 
-int TText::GoNext()
+bool TText::GoNext()
 {
+  if(!IsTextEnded())
+  {
+    if(pCurrent->pDown != NULL)
+    {
+      St.push(pCurrent);
+      pCurrent = pCurrent->pDown;
+    }
+    else if(pCurrent->pNext != NULL)
+    {
+      St.push(pCurrent);
+      pCurrent = pCurrent->pNext;
+    }
+    else
+    {
+      while(!St.empty()
+          && (St.top()->pNext == pCurrent || St.top()->pNext == NULL))
+      {
+        pCurrent = St.top();
+        St.pop();
+      }
+      if(St.empty())
+        pCurrent = NULL;
+      else
+        pCurrent = St.top()->pNext;
+    }
+  }
+
+  return IsTextEnded();
 }
 
 void TText::Read(const char *pFileName)
@@ -175,6 +208,5 @@ void TText::Write(const char *pFileName)
 }
 
 void TText::Print()
-{
-}
+{ PrintText(pFirst); }
 

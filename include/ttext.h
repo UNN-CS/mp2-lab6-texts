@@ -47,9 +47,9 @@ public:
   void DelNextLine();
   void DelNextSection();
 
-  int Reset();
+  void Reset();
   bool IsTextEnded() const;
-  int GoNext();
+  bool GoNext();
 
   void Read(const char *pFileName);
   void Write(const char *pFileName);
