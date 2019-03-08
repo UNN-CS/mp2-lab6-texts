@@ -19,7 +19,7 @@ private:
 
   std::stack<PTTextLink> St; // for iterator
   PTTextLink GetFirstAtom(PTTextLink pl);
-  void PrintText(PTTextLink ptl);
+  void PrintText(PTTextLink ptl, std::ostream &os);
   PTTextLink ReadText(std::ifstream &TxtFile);
 
   PTTextLink CreateLink(
@@ -30,10 +30,10 @@ public:
 
   PTText GetCopy();
 
-  int GoFirstLink();
-  int GoDownLink();
-  int GoNextLink();
-  int GoPrevLink();
+  bool GoFirstLink();
+  bool GoDownLink();
+  bool GoNextLink();
+  bool GoPrevLink();
 
   std::string GetLine();
   void SetLine(std::string s);
@@ -54,7 +54,7 @@ public:
   void Read(const char *pFileName);
   void Write(const char *pFileName);
 
-  void Print();
+  void Print(std::ostream &os);
 };
 
 #endif

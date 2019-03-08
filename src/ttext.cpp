@@ -13,7 +13,7 @@ PTTextLink TText::GetFirstAtom(PTTextLink pl)
   return pLink;
 }
 
-void TText::PrintText(PTTextLink ptl)
+void TText::PrintText(PTTextLink ptl, std::ostream &os)
 {
   int lvl = 0;
   const char *indent = "  ";
@@ -23,8 +23,8 @@ void TText::PrintText(PTTextLink ptl)
   while(pLink != NULL)
   {
     for(int i = 0; i < lvl; ++i)
-      std::cout << indent;
-    std::cout << ptl->Str << std::endl;
+      os << indent;
+    os << ptl->Str << std::endl;
 
     if(pLink->pDown != NULL)
     {
@@ -72,7 +72,6 @@ void TText::PrintText(PTTextLink ptl, textLevel=0)
 
 PTTextLink TText::ReadText(std::ifstream &TxtFile)
 {
-
 }
 
 PTTextLink TText::CreateLink(const TStr s, PTTextLink pn, PTTextLink pd)
@@ -92,7 +91,6 @@ TText::TText(PTTextLink pl)
     pl = CreateLink();
 
   pFirst = pl;
-  pFirst->refCount += 1;
 }
 
 TText::~TText(){}
@@ -101,29 +99,66 @@ PTText TText::GetCopy()
 {
 }
 
-int TText::GoFirstLink()
+bool TText::GoFirstLink()
 {
+  if(pFirst == NULL)
+  {
+    return false;
+  }
+  else
+  {
+    Path.push(pCurrent);
+    pCurrent = pFirst;
+    return true;
+  }
 }
 
-int TText::GoDownLink()
+bool TText::GoDownLink()
 {
+  if(pCurrent == NULL)
+    return false;
+  if(pCurrent->pDown != NULL)
+  {
+    Path.push(pCurrent);
+    pCurrent = pCurrent->pDown;
+    return true;
+  }
+  else
+  {
+    return false;
+  }
 }
 
-int TText::GoNextLink()
+bool TText::GoNextLink()
 {
+  if(pCurrent == NULL)
+    return false;
+  if(pCurrent->pNext != NULL)
+  {
+    Path.push(pCurrent);
+    pCurrent = pCurrent->pNext;
+    return true;
+  }
+  else
+  {
+    return false;
+  }
 }
 
-int TText::GoPrevLink()
+bool TText::GoPrevLink()
 {
+  if(Path.empty())
+    return false;
+  pCurrent = Path.top();
+  Path.pop();
+  return true;
 }
 
 std::string TText::GetLine()
-{
-}
+{ return std::string(pCurrent->Str); }
 
 void TText::SetLine(std::string s)
-{
-}
+{ strncpy(pCurrent->Str, s.c_str(), TextLineLength); }
 
 void TText::InsDownLine(std::string s)
 {
@@ -201,12 +236,16 @@ bool TText::GoNext()
 
 void TText::Read(const char *pFileName)
 {
+  std::ifstream fin(pFileName);
+  ReadText(fin);
 }
 
 void TText::Write(const char *pFileName)
 {
+  std::ofstream fout(pFileName);
+  Print(fout);
 }
 
-void TText::Print()
-{ PrintText(pFirst); }
+void TText::Print(std::ostream &os)
+{ PrintText(pFirst, os); }
 
