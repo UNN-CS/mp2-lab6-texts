@@ -20,6 +20,8 @@
 #define TextError -102
 #define TextNoMem -101
 
+#define TextLinkNoMemControl -201
+
 #define DelMark "&&&"
 
 class TTextMem;

@@ -1,6 +1,8 @@
 #include "../include/ttextmem.h"
 #include "../include/ttextlink.h"
-#include "../include/ttext.h"
+
+bool TTextMem::IsMemCreated()
+{ return pFirst != NULL; }
 
 void TTextMem::CreateMem(std::size_t size)
 {
@@ -11,8 +13,6 @@ void TTextMem::CreateMem(std::size_t size)
     pLink->pNext = pLink + 1;
 
   pLink->pNext = NULL;
-
-  memCreated = true;
 }
 
 void TTextMem::GarbageCollect()
@@ -27,15 +27,13 @@ void TTextMem::ReturnMem()
 {
   ::delete[] pFirst;
   pFree = pFirst = pLast = NULL;
-  memCreated = false;
 }
 
 TTextMem::TTextMem():
     pFirst(NULL),
     pLast(NULL),
     pFree(NULL),
-    pGarbage(NULL),
-    memCreated(false)
+    pGarbage(NULL)
 {}
 
 TTextMem::~TTextMem()

@@ -12,7 +12,7 @@ private:
   PTTextLink pFree;
   PTTextLink pGarbage;
 
-  bool memCreated;
+  bool IsMemCreated();
 
   void CreateMem(std::size_t size=MemSize);
 

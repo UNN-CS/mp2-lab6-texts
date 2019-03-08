@@ -7,6 +7,43 @@ PTTextLink TText::GetFirstAtom(PTTextLink pl)
 
 void TText::PrintText(PTTextLink ptl)
 {
+  int lvl = 0;
+  const char *indent = "  ";
+  std::stack<PTTextLink> tstack;
+  PTTextLink pLink = ptl;
+
+  while(true)
+  {
+    for(int i = 0; i < lvl; ++i)
+      std::cout << indent;
+    std::cout << ptl->Str << '\n';
+
+    if(pLink == NULL)
+    {
+      break;
+    }
+    else if(pLink->pDown != NULL)
+    {
+      tstack.push(pLink);
+      pLink = pLink->pDown;
+      ++lvl;
+    }
+    else if(pLink->pNext != NULL)
+    {
+      tstack.push(pLink);
+      pLink = pLink->pNext;
+    }
+    else
+    {
+      while(tstack.top()->pNext == pLink)
+      {
+        pLink = tstack.top();
+        tstack.pop();
+      }
+      pLink = tstack.top()->pNext;
+      --lvl;
+    }
+  }
 }
 
 PTTextLink TText::ReadText(std::ifstream &TxtFile)
@@ -15,7 +52,7 @@ PTTextLink TText::ReadText(std::ifstream &TxtFile)
 
 PTTextLink TText::CreateLink(const TStr s, PTTextLink pn, PTTextLink pd)
 {
-  if(!MemControl.memCreated)
+  if(!MemControl.IsMemCreated())
     MemControl.CreateMem();
 
   TTextLink::SetMemControl(&MemControl);

@@ -19,18 +19,15 @@ void *TTextLink::operator new(std::size_t)
   PTTextLink pLink = NULL;
   if(pCurrMemControl == NULL)
   {
-    throw TextNoMem;
+    throw TextLinkNoMemControl;
   }
   else
   {
-    pLink = pCurrMemControl->pFree;
-    if(pLink == NULL)
-      throw TextNoMem;
-    else
-      pCurrMemControl->pFree = pLink->pNext;
-  }
+    if(!pCurrMemControl->IsMemCreated())
+      pCurrMemControl->CreateMem();
 
-  pCurrMemControl = NULL;
+    pLink = pCurrMemControl->pFree;
+  }
 
   return pLink;
 }
