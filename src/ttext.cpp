@@ -153,7 +153,12 @@ std::string TText::GetLine()
 }
 
 void TText::SetLine(std::string s)
-{ strncpy(pCurrent->Str, s.c_str(), TextLineLength); }
+{
+  if(pCurrent == NULL)
+    throw TextError;
+
+  strncpy(pCurrent->Str, s.c_str(), TextLineLength);
+}
 
 void TText::InsDownLine(std::string s)
 {
@@ -177,14 +182,16 @@ void TText::InsNextLine(std::string s)
 {
   if(pCurrent == NULL)
     throw TextError;
-  /* TODO: check*/
+
   PTTextLink pLink = CreateLink(s.c_str(), pCurrent->GetNext(), NULL);
   pCurrent->SetNext(pLink);
 }
 
 void TText::InsNextSection(std::string s)
 {
-  /* TODO: check*/
+  if(pCurrent == NULL)
+    throw TextError;
+
   PTTextLink pLink = CreateLink(s.c_str(), NULL, pCurrent->GetNext());
   pCurrent->SetNext(pLink);
 }
@@ -207,8 +214,46 @@ void TText::DelDownLine()
 
 void TText::DelDownSection()
 {
-  /* TODO: check*/
-  
+  if(pCurrent == NULL)
+    throw TextError;
+  if(pCurrent->GetDown() == NULL)
+    throw TextError;
+
+  std::stack<PTTextLink> tstack, del;
+  // link which will remove
+  PTTextLink pDel = pCurrent->GetDown(),
+      pLink;
+
+  // pDown now on pDown->pNext
+  pCurrent->SetDown(pDel->GetNext());
+  pDel->SetNext(NULL);
+
+
+  tstack.push(pDel);
+  if(pDel->GetDown() != NULL)
+    tstack.push(pDel->GetDown());
+  pLink = pDel;
+
+  while(tstack.size() > 0)
+  {
+    del.push(pLink);
+
+    pLink = tstack.top();
+    tstack.pop();
+    if(pLink != pCurrent->GetDown())
+    {
+      if(pLink->GetNext() != NULL)
+        tstack.push(pLink->GetNext());
+      if(pLink->GetDown() != NULL)
+        tstack.push(pLink->GetDown());
+    }
+  }
+
+  while(del.size() > 0)
+  {
+    del.top()->SetDown(NULL);
+    del.top()->SetNext(NULL);
+  }
 }
 
 void TText::DelNextLine()
