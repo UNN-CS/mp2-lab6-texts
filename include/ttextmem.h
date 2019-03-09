@@ -10,8 +10,8 @@ private:
   PTTextLink pFirst;
   PTTextLink pLast;
   PTTextLink pFree;
-  PTTextLink pGarbage;
 
+public:
   bool IsMemCreated();
 
   void CreateMem(std::size_t size=MemSize);
@@ -25,7 +25,6 @@ private:
   ~TTextMem();
 
   friend class TTextLink;
-  friend class TText;
 };
 
 #endif

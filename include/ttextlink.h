@@ -9,13 +9,13 @@
 class TTextLink
 {
 private:
-  int refCount;
   static PTTextMem pCurrMemControl;
+  int refCount;
+  PTTextLink pNext, pDown;
+  PTTextMem pMemControl;
 
 public:
   TStr Str;
-  PTTextLink pNext, pDown;
-  PTTextMem pMemControl;
 
   TTextLink(const TStr s=NULL, PTTextLink pn=NULL, PTTextLink pd=NULL);
   virtual ~TTextLink();
@@ -25,9 +25,11 @@ public:
   static void SetMemControl(PTTextMem mc);
 
   bool IsAtom() const;
+  PTTextLink GetCopy(PTTextMem mc=NULL) const;
+  void SetNext(PTTextLink pn);
+  void SetDown(PTTextLink pd);
   PTTextLink GetNext() const;
   PTTextLink GetDown() const;
-  PTTextLink GetCopy(PTTextMem mc=NULL) const;
 
   virtual void Print(std::ostream &os) const;
 

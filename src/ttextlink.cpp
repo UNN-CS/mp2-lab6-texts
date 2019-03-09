@@ -9,7 +9,15 @@ void TTextLink::SetMemControl(PTTextMem mc)
 
 TTextLink::TTextLink(const TStr s, PTTextLink pn, PTTextLink pd)
     : refCount(0), pNext(pn), pDown(pd), pMemControl(pCurrMemControl)
-{ strcpy(Str, s); }
+{
+  strcpy(Str, s);
+
+  if(pd != NULL)
+    pd->refCount += 1;
+
+  if(pn != NULL)
+    pn->refCount += 1;
+}
 
 TTextLink::~TTextLink(){}
 
@@ -17,6 +25,7 @@ TTextLink::~TTextLink(){}
 void *TTextLink::operator new(std::size_t)
 {
   PTTextLink pLink = NULL;
+
   if(pCurrMemControl == NULL)
   {
     throw TextLinkNoMemControl;
@@ -27,7 +36,10 @@ void *TTextLink::operator new(std::size_t)
       pCurrMemControl->CreateMem();
 
     pLink = pCurrMemControl->pFree;
+    pCurrMemControl->pFree = pCurrMemControl->pFree->pNext;
   }
+
+  pCurrMemControl = NULL;
 
   return pLink;
 }
@@ -43,18 +55,13 @@ void TTextLink::operator delete(void *pM) noexcept(false)
   else
   {
     pLink->pNext = pLink->pMemControl->pFree;
+    pLink->pDown = NULL;
     pLink->pMemControl->pFree = pLink;
   }
 }
 
 bool TTextLink::IsAtom() const
 { return pDown == NULL; }
-
-PTTextLink TTextLink::GetNext() const
-{ return pNext; }
-
-PTTextLink TTextLink::GetDown() const
-{ return pDown; }
 
 PTTextLink TTextLink::GetCopy(PTTextMem mc) const
 {
@@ -64,6 +71,34 @@ PTTextLink TTextLink::GetCopy(PTTextMem mc) const
   pCurrMemControl = mc;
   return new TTextLink(Str, pNext, pDown);
 }
+
+void TTextLink::SetNext(PTTextLink pn)
+{
+  if(pNext != NULL)
+    pNext->refCount -= 1;
+
+  pNext = pn;
+
+  if(pn != NULL)
+    pn->refCount += 1;
+}
+
+void TTextLink::SetDown(PTTextLink pd)
+{
+  if(pDown != NULL)
+    pDown->refCount -= 1;
+
+  pDown = pd;
+
+  if(pd != NULL)
+    pd->refCount += 1;
+}
+
+PTTextLink TTextLink::GetNext() const
+{ return pNext; }
+
+PTTextLink TTextLink::GetDown() const
+{ return pDown; }
 
 void TTextLink::Print(std::ostream &os) const
 { os << Str << std::endl; }

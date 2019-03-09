@@ -15,13 +15,12 @@ private:
 
   PTTextLink pFirst;
   PTTextLink pCurrent;
-  std::stack<PTTextLink> Path; // exclude pCurrent
-
+  std::stack<PTTextLink> Path;
   std::stack<PTTextLink> St; // for iterator
+
   PTTextLink GetFirstAtom(PTTextLink pl);
   void PrintText(PTTextLink ptl, std::ostream &os);
   PTTextLink ReadText(std::ifstream &TxtFile);
-
   PTTextLink CreateLink(
       const TStr s=NULL, PTTextLink pn=NULL, PTTextLink pd=NULL);
 public:

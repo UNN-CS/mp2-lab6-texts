@@ -18,6 +18,7 @@ void TTextMem::CreateMem(std::size_t size)
 void TTextMem::GarbageCollect()
 {
   PTTextLink pLink;
+
   for(pLink = pFirst; pLink != NULL; ++pLink)
     if(pLink->refCount == 0)
       delete pLink;
@@ -32,8 +33,7 @@ void TTextMem::ReturnMem()
 TTextMem::TTextMem():
     pFirst(NULL),
     pLast(NULL),
-    pFree(NULL),
-    pGarbage(NULL)
+    pFree(NULL)
 {}
 
 TTextMem::~TTextMem()

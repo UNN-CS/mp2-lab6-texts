@@ -4,9 +4,11 @@
 PTTextLink TText::GetFirstAtom(PTTextLink pl)
 {
   PTTextLink pLink = pl;
+  std::stack<PTTextLink> tstack;
+
   while(!pLink->IsAtom())
   {
-    St.push(pLink);
+    tstack.push(pLink);
     pLink = pLink->GetDown();
   }
 
@@ -26,21 +28,21 @@ void TText::PrintText(PTTextLink ptl, std::ostream &os)
       os << indent;
     os << ptl->Str << std::endl;
 
-    if(pLink->pDown != NULL)
+    if(pLink->GetDown() != NULL)
     {
       tstack.push(pLink);
-      pLink = pLink->pDown;
+      pLink = pLink->GetDown();
       ++lvl;
     }
-    else if(pLink->pNext != NULL)
+    else if(pLink->GetNext() != NULL)
     {
       tstack.push(pLink);
-      pLink = pLink->pNext;
+      pLink = pLink->GetNext();
     }
     else
     {
-      while(!tstack.empty()
-          && (tstack.top()->pNext == pLink || tstack.top()->pNext == NULL))
+      while(!tstack.empty() && (tstack.top()->GetNext() == pLink
+          || tstack.top()->GetNext() == NULL))
       {
         pLink = tstack.top();
         tstack.pop();
@@ -48,7 +50,7 @@ void TText::PrintText(PTTextLink ptl, std::ostream &os)
       if(tstack.empty())
         pLink = NULL;
       else
-        pLink = tstack.top()->pNext;
+        pLink = tstack.top()->GetNext();
       --lvl;
     }
   }
@@ -76,9 +78,6 @@ PTTextLink TText::ReadText(std::ifstream &TxtFile)
 
 PTTextLink TText::CreateLink(const TStr s, PTTextLink pn, PTTextLink pd)
 {
-  if(!MemControl.IsMemCreated())
-    MemControl.CreateMem();
-
   TTextLink::SetMemControl(&MemControl);
   PTTextLink pLink = new TTextLink(s, pn, pd);
 
@@ -101,96 +100,160 @@ PTText TText::GetCopy()
 
 bool TText::GoFirstLink()
 {
-  if(pFirst == NULL)
-  {
+  if(pCurrent == pFirst)
     return false;
-  }
-  else
-  {
-    Path.push(pCurrent);
-    pCurrent = pFirst;
-    return true;
-  }
+
+  Path.push(pCurrent);
+  pCurrent = pFirst;
+  return true;
 }
 
 bool TText::GoDownLink()
 {
   if(pCurrent == NULL)
     return false;
-  if(pCurrent->pDown != NULL)
-  {
-    Path.push(pCurrent);
-    pCurrent = pCurrent->pDown;
-    return true;
-  }
-  else
-  {
+
+  if(pCurrent->GetDown() == NULL)
     return false;
-  }
+
+  Path.push(pCurrent);
+  pCurrent = pCurrent->GetDown();
+  return true;
 }
 
 bool TText::GoNextLink()
 {
   if(pCurrent == NULL)
     return false;
-  if(pCurrent->pNext != NULL)
-  {
-    Path.push(pCurrent);
-    pCurrent = pCurrent->pNext;
-    return true;
-  }
-  else
-  {
+
+  if(pCurrent->GetNext() == NULL)
     return false;
-  }
+
+  Path.push(pCurrent);
+  pCurrent = pCurrent->GetNext();
+  return true;
 }
 
 bool TText::GoPrevLink()
 {
   if(Path.empty())
     return false;
+
   pCurrent = Path.top();
   Path.pop();
   return true;
 }
 
 std::string TText::GetLine()
-{ return std::string(pCurrent->Str); }
+{
+  if(pCurrent == NULL)
+    throw TextError;
+
+  return std::string(pCurrent->Str);
+}
 
 void TText::SetLine(std::string s)
 { strncpy(pCurrent->Str, s.c_str(), TextLineLength); }
 
 void TText::InsDownLine(std::string s)
 {
+  if(pCurrent == NULL)
+    throw TextError;
+
+  PTTextLink pLink = CreateLink(s.c_str(), pCurrent->GetDown(), NULL);
+  pCurrent->SetDown(pLink);
 }
 
 void TText::InsDownSection(std::string s)
 {
+  if(pCurrent == NULL)
+    throw TextError;
+
+  PTTextLink pLink = CreateLink(s.c_str(), NULL, pCurrent->GetDown());
+  pCurrent->SetDown(pLink);
 }
 
 void TText::InsNextLine(std::string s)
 {
+  if(pCurrent == NULL)
+    throw TextError;
+  /* TODO: check*/
+  PTTextLink pLink = CreateLink(s.c_str(), pCurrent->GetNext(), NULL);
+  pCurrent->SetNext(pLink);
 }
 
 void TText::InsNextSection(std::string s)
 {
+  /* TODO: check*/
+  PTTextLink pLink = CreateLink(s.c_str(), NULL, pCurrent->GetNext());
+  pCurrent->SetNext(pLink);
 }
 
 void TText::DelDownLine()
 {
+  if(pCurrent == NULL)
+    throw TextError;
+  if(pCurrent->GetDown() == NULL)
+    throw TextError;
+  if(pCurrent->GetDown()->GetDown() != NULL)
+    throw TextError;
+
+  PTTextLink pLink = pCurrent->GetDown();
+  pCurrent->SetDown(pLink->GetNext());
+
+  pLink->SetDown(NULL);
+  pLink->SetNext(NULL);
 }
 
 void TText::DelDownSection()
 {
+  /* TODO: check*/
+  
 }
 
 void TText::DelNextLine()
 {
+  if(pCurrent == NULL)
+    throw TextError;
+  if(pCurrent->GetNext() == NULL)
+    throw TextError;
+  if(pCurrent->GetNext()->GetDown() != NULL)
+    throw TextError;
+
+  PTTextLink pLink = pCurrent->GetNext();
+  pCurrent->SetNext(pLink->GetNext());
+
+  pLink->SetNext(NULL);
+  pLink->SetDown(NULL);
 }
 
 void TText::DelNextSection()
 {
+
 }
+
+/*void TText::DelNextSection()
+{
+  if(pCurrent == NULL)
+    throw TextError;
+
+  PTTextLink pDel = pCurrent->GetNext();
+
+  if(pDel == NULL)
+    throw TextError;
+
+  std::stack<PTTextLink> tstack, del;
+  PTTextLink pLink = pDel;
+
+  while(pLink != NULL)
+  {
+    del.push(pLink);
+
+    if(pLink->GetDown() != NULL)
+
+  }
+
+}*/
 
 void TText::Reset()
 {
