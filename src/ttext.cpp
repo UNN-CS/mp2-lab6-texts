@@ -127,12 +127,13 @@ TText::~TText()
 PTText TText::GetCopy()
 {
   PTText pText = new TText;
-  PTTextLink pStart, pLink;
+  PTTextLink pLink;
   std::stack<PTTextLink> tstack;
 
   Reset();
-  pLink = pStart = pText->CreateLink(pCurrent->Str);
-  pText->pRoot->SetNext(pStart);
+  pLink = pText->pFirst = pText->CreateLink(pCurrent->Str);
+
+  pText->pRoot->SetNext(pText->pFirst);
 
   while(!IsTextEnded())
   {
@@ -153,15 +154,12 @@ PTText TText::GetCopy()
     }
     else
     {
-
+      pLink->SetNext(pText->CreateLink(pCurrent->Str));
+      pLink = pLink->GetNext();
     }
   }
-  /*
-   *
-   * TODO
-   *
-   */
-  return NULL;
+
+  return pText;
 }
 
 bool TText::GoFirstLink()
