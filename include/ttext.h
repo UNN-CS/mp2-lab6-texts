@@ -13,6 +13,7 @@ class TText: public TDataCom
 private:
   TTextMem MemControl;
 
+  PTTextLink pRoot;
   PTTextLink pFirst;
   PTTextLink pCurrent;
   std::stack<PTTextLink> Path;
@@ -23,6 +24,7 @@ private:
   PTTextLink ReadText(std::ifstream &TxtFile);
   PTTextLink CreateLink(
       const TStr s=NULL, PTTextLink pn=NULL, PTTextLink pd=NULL);
+
 public:
   TText(PTTextLink pl=NULL);
   virtual ~TText();
@@ -53,7 +55,7 @@ public:
   void Read(const char *pFileName);
   void Write(const char *pFileName);
 
-  void Print(std::ostream &os);
+  void Print();
 };
 
 #endif

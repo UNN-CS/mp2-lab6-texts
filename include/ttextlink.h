@@ -17,11 +17,12 @@ private:
 public:
   TStr Str;
 
-  TTextLink(const TStr s=NULL, PTTextLink pn=NULL, PTTextLink pd=NULL);
+  TTextLink(const TStr s, PTTextLink pn=NULL, PTTextLink pd=NULL);
+  TTextLink();
   virtual ~TTextLink();
 
   static void *operator new(std::size_t);
-  static void operator delete(void *pM) noexcept(false);
+  static void operator delete(void *pM);
   static void SetMemControl(PTTextMem mc);
 
   bool IsAtom() const;

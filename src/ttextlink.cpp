@@ -19,6 +19,8 @@ TTextLink::TTextLink(const TStr s, PTTextLink pn, PTTextLink pd)
     pn->refCount += 1;
 }
 
+TTextLink::TTextLink(){}
+
 TTextLink::~TTextLink(){}
 
 
@@ -28,7 +30,8 @@ void *TTextLink::operator new(std::size_t)
 
   if(pCurrMemControl == NULL)
   {
-    throw TextLinkNoMemControl;
+    return ::new TTextLink;
+    //throw TextLinkNoMemControl;
   }
   else
   {
@@ -44,19 +47,22 @@ void *TTextLink::operator new(std::size_t)
   return pLink;
 }
 
-void TTextLink::operator delete(void *pM) noexcept(false)
+void TTextLink::operator delete(void *pM)
 {
   PTTextLink pLink = static_cast<PTTextLink>(pM);
 
-  if(pLink == NULL)
+  if(pLink != NULL)
   {
-    throw TextError;
-  }
-  else
-  {
-    pLink->pNext = pLink->pMemControl->pFree;
-    pLink->pDown = NULL;
-    pLink->pMemControl->pFree = pLink;
+    if(pLink->pMemControl != NULL)
+    {
+      pLink->pNext = pLink->pMemControl->pFree;
+      pLink->pDown = NULL;
+      pLink->pMemControl->pFree = pLink;
+    }
+    else
+    {
+      ::delete pLink;
+    }
   }
 }
 
