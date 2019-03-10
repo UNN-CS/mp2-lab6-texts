@@ -73,11 +73,10 @@ PTTextLink TText::ReadText(std::ifstream &TxtFile)
   std::string line;
   PTTextLink pLink;
 
-  pRoot->SetNext(NULL);
-  MemControl.GarbageCollect();
-
   std::getline(TxtFile, line);
   pLink = pFirst = CreateLink(line.c_str());
+
+  pRoot->SetNext(pFirst);
 
   while(std::getline(TxtFile, line))
   {
@@ -96,10 +95,9 @@ PTTextLink TText::ReadText(std::ifstream &TxtFile)
     else
     {
       pLink->SetNext(CreateLink(line.c_str()));
+      pLink = pLink->GetNext();
     }
   }
-
-  pRoot->SetNext(pFirst);
 
   return pFirst;
 }
@@ -128,6 +126,36 @@ TText::~TText()
 
 PTText TText::GetCopy()
 {
+  PTText pText = new TText;
+  PTTextLink pStart, pLink;
+  std::stack<PTTextLink> tstack;
+
+  Reset();
+  pLink = pStart = pText->CreateLink(pCurrent->Str);
+  pText->pRoot->SetNext(pStart);
+
+  while(!IsTextEnded())
+  {
+    if(!tstack.empty()
+        && pCurrent->GetDown() == NULL && pCurrent->GetNext() == NULL)
+    {
+      pLink->SetNext(pText->CreateLink(pCurrent->Str));
+      pLink = tstack.top();
+      tstack.pop();
+    }
+    else if(pCurrent->GetDown() != NULL)
+    {
+      pLink->SetNext(pText->CreateLink(pCurrent->Str));
+      tstack.push(pLink->GetNext());
+      GoNext();
+      pLink = pText->CreateLink(pCurrent->Str);
+      tstack.top()->SetDown(pLink);
+    }
+    else
+    {
+
+    }
+  }
   /*
    *
    * TODO
