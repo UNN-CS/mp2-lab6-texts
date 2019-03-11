@@ -89,13 +89,11 @@ PTTextLink TText::ReadText(std::ifstream &TxtFile)
 
   std::getline(TxtFile, line);
   pLink = pFirst = CreateLink(line.c_str());
-  std::cerr << line << std::endl;
 
   pRoot->SetNext(pFirst);
 
   while(std::getline(TxtFile, line))
   {
-    std::cerr << line.c_str() << std::endl;
     if(line == "}")
     {
       pLink = tstack.top();
@@ -105,7 +103,6 @@ PTTextLink TText::ReadText(std::ifstream &TxtFile)
     {
       tstack.push(pLink);
       std::getline(TxtFile, line);
-      std::cerr << line << std::endl;
       pLink = CreateLink(line.c_str());
       tstack.top()->SetDown(pLink);
     }
