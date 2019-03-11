@@ -31,12 +31,11 @@ void *TTextLink::operator new(std::size_t)
   if(pCurrMemControl == NULL)
   {
     return ::new TTextLink;
-    //throw TextLinkNoMemControl;
   }
   else
   {
     if(!pCurrMemControl->IsMemCreated())
-      pCurrMemControl->CreateMem();
+      pCurrMemControl->CreateMem(); // works
 
     pLink = pCurrMemControl->pFree;
     pCurrMemControl->pFree = pCurrMemControl->pFree->pNext;
@@ -44,7 +43,7 @@ void *TTextLink::operator new(std::size_t)
 
   pCurrMemControl = NULL;
 
-  return pLink;
+  return (void*)pLink;
 }
 
 void TTextLink::operator delete(void *pM)
