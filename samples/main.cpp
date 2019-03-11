@@ -17,5 +17,17 @@ int main(int argc, char *argv[])
 
   t.Print();
 
+  TText t1;
+
+  TText &t2 = *t.GetCopy();
+
+  t2.Print();
+
+  for(t2.Reset(); !t2.IsTextEnded(); t2.GoNext())
+    cout << t2.GetLine() << endl;
+
+  ::delete &t2;
+
   return 0;
 }
+

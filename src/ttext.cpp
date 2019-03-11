@@ -144,7 +144,7 @@ TText::~TText()
 
 PTText TText::GetCopy()
 {
-  PTText pText = new TText;
+  PTText pText = ::new TText(NULL);
   PTTextLink pLink;
   std::stack<PTTextLink> tstack;
 
@@ -155,23 +155,26 @@ PTText TText::GetCopy()
 
   while(!IsTextEnded())
   {
+    //GoNext();
     if(!tstack.empty()
         && pCurrent->GetDown() == NULL && pCurrent->GetNext() == NULL)
     {
-      pLink->SetNext(pText->CreateLink(pCurrent->Str));
       pLink = tstack.top();
       tstack.pop();
+      GoNext();
+      pLink->SetNext(pText->CreateLink(pCurrent->Str));
+      pLink = pLink->GetNext();
     }
     else if(pCurrent->GetDown() != NULL)
     {
-      pLink->SetNext(pText->CreateLink(pCurrent->Str));
-      tstack.push(pLink->GetNext());
       GoNext();
+      tstack.push(pLink);
       pLink = pText->CreateLink(pCurrent->Str);
       tstack.top()->SetDown(pLink);
     }
     else
     {
+      GoNext();
       pLink->SetNext(pText->CreateLink(pCurrent->Str));
       pLink = pLink->GetNext();
     }
@@ -420,6 +423,7 @@ void TText::Reset()
 
   pCurrent = pFirst;
 
+  St.push(pCurrent);
   if(pCurrent->GetNext() != NULL)
     St.push(pCurrent->GetNext());
   if(pCurrent->GetDown() != NULL)
@@ -427,7 +431,7 @@ void TText::Reset()
 }
 
 bool TText::IsTextEnded() const
-{ return St.empty(); }
+{ return St.top() == pFirst; }
 
 bool TText::GoNext()
 {
@@ -450,6 +454,10 @@ bool TText::GoNext()
 void TText::Read(const char *pFileName)
 {
   std::ifstream fin(pFileName);
+
+  if(!fin.is_open())
+    throw TextError;
+
   ReadText(fin);
 }
 
