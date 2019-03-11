@@ -23,30 +23,45 @@ void TText::PrintText(PTTextLink ptl, std::ostream &os)
   if(ptl == NULL)
     throw TextError;
 
-  //int lvl = 0;
-  //const char *indent = "  ";
+  int lvl = 0;
+  const char *indent = "  ";
   std::stack<PTTextLink> tstack;
   PTTextLink pLink;
 
   // reset
+  tstack.push(ptl);
   if(ptl->GetNext() != NULL)
+  {
     tstack.push(ptl->GetNext());
+  }
   if(ptl->GetDown() != NULL)
+  {
     tstack.push(ptl->GetDown());
+    lvl += 1;
+  }
 
   os << ptl->Str << std::endl;
 
-  while(!tstack.empty())
+  while(tstack.top() != ptl)
   {
     pLink = tstack.top();
     tstack.pop();
 
-    if(pLink->GetNext() != NULL)
-      tstack.push(pLink->GetNext());
-    if(pLink->GetDown() != NULL)
-      tstack.push(pLink->GetDown());
+    for(int i = 0; i < lvl; ++i)
+      os << indent;
+    os << pLink->Str << std::endl;
 
-    os << pLink << std::endl;
+    if(pLink->GetNext() != NULL)
+    {
+      tstack.push(pLink->GetNext());
+    }
+    if(pLink->GetDown() != NULL)
+    {
+      tstack.push(pLink->GetDown());
+      lvl += 1;
+    }
+    if(pLink->GetDown() == NULL && pLink->GetNext() == NULL)
+      lvl -= 1;
   }
 }
 
@@ -74,11 +89,13 @@ PTTextLink TText::ReadText(std::ifstream &TxtFile)
 
   std::getline(TxtFile, line);
   pLink = pFirst = CreateLink(line.c_str());
+  std::cerr << line << std::endl;
 
   pRoot->SetNext(pFirst);
 
   while(std::getline(TxtFile, line))
   {
+    std::cerr << line.c_str() << std::endl;
     if(line == "}")
     {
       pLink = tstack.top();
@@ -88,6 +105,7 @@ PTTextLink TText::ReadText(std::ifstream &TxtFile)
     {
       tstack.push(pLink);
       std::getline(TxtFile, line);
+      std::cerr << line << std::endl;
       pLink = CreateLink(line.c_str());
       tstack.top()->SetDown(pLink);
     }
@@ -112,6 +130,10 @@ PTTextLink TText::CreateLink(const TStr s, PTTextLink pn, PTTextLink pd)
 TText::TText(PTTextLink pl)
 {
   pRoot = ::new TTextLink;
+
+  if(pl == NULL)
+    pl = CreateLink("", NULL, NULL);
+
   pRoot->SetNext(pl);
 
   pFirst = pl;

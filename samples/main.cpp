@@ -5,10 +5,20 @@
 //
 
 #include <iostream>
+#include "include/ttext.h"
 
 using namespace std;
 
-int main()
+int main(int argc, char *argv[])
 {
+  TText t;
+
+  cerr << "\n\nREADING  " << argc << endl;
+
+  t.Read(argv[1]);
+
+  cerr << "\n\nPRINTING  " << endl;
+  t.Print();
+
   return 0;
 }
