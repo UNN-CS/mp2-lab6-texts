@@ -1,6 +1,6 @@
-#include "../include/ttextmem.h"
+#include "include/ttextmem.h"
 #include <stack>
-#include "../include/ttextlink.h"
+#include "include/ttextlink.h"
 
 bool TTextMem::IsMemCreated() const
 { return pFirst != NULL; }

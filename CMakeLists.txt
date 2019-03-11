@@ -21,6 +21,8 @@ set(MP2_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/include")
 
 include_directories("${MP2_INCLUDE}" gtest)
 
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}")
+
 # BUILD
 add_subdirectory(src)
 add_subdirectory(samples)

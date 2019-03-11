@@ -1,1 +1,2 @@
-#include "../include/ttextviewer.h"
+#include "include/ttextviewer.h"
+

@@ -1,6 +1,5 @@
-#include "../include/ttext.h"
-#include <queue>
-#include "../include/ttextlink.h"
+#include "include/ttext.h"
+#include "include/ttextlink.h"
 
 PTTextLink TText::GetFirstAtom(PTTextLink pl)
 {

@@ -1,6 +1,6 @@
-#include "../include/ttextlink.h"
-#include "../include/ttextmem.h"
-#include "../include/ttext.h"
+#include "include/ttextlink.h"
+#include "include/ttextmem.h"
+#include "include/ttext.h"
 
 PTTextMem TTextLink::pCurrMemControl = NULL;
 
