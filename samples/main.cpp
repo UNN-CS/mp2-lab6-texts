@@ -9,9 +9,27 @@
 
 using namespace std;
 
-int main(int argc, char *argv[])
+int main()
 {
   TText t;
+  t.Read("../test/text1.txt");
+
+  PTText pt = t.GetCopy();
+
+  t.Print();
+  pt->Print();
+
+  cerr << t.GetLine() << endl;
+  while(!t.IsTextEnded())
+  {
+    cerr << t.GetLine() << endl;
+  }
+
+  cerr << pt->GetLine() << endl;
+  while(!pt->IsTextEnded())
+  {
+    cerr << pt->GetLine() << endl;
+  }
 
   return 0;
 }
