@@ -8,6 +8,7 @@
 #include <cstdio>
 #include <limits>
 #include "include/ttext.h"
+#include "include/ttextviewer.h"
 
 using namespace std;
 
@@ -76,14 +77,16 @@ int main()
       if(pt == NULL)
         cout << "Select file\n";
       else
-        pt->Print();
+      {
+        TTextViewer tv(pt);
+        tv.FPrint(FP_NUM | FP_PTR);
+      }
       cout << "\nPress enter...\n";
       PAUSE();
       break;
 
     case '3':
-      insert();
-      break;
+      insert(); break;
 
     case '4':
       break;
