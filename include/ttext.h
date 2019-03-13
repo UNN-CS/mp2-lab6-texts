@@ -18,6 +18,7 @@ private:
   PTTextLink pCurrent;
   std::stack<PTTextLink> Path;
   std::stack<PTTextLink> St; // for iterator
+  std::string indent;
 
   PTTextLink GetFirstAtom(PTTextLink pl);
   void PrintText(PTTextLink ptl, std::ostream &os);

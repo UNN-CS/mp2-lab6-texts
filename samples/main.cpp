@@ -12,24 +12,11 @@ using namespace std;
 int main()
 {
   TText t;
-  t.Read("../test/text1.txt");
-
-  PTText pt = t.GetCopy();
-
+  t.Read("../test/text2.txt");
   t.Print();
-  pt->Print();
 
-  cerr << t.GetLine() << endl;
-  while(!t.IsTextEnded())
-  {
-    cerr << t.GetLine() << endl;
-  }
-
-  cerr << pt->GetLine() << endl;
-  while(!pt->IsTextEnded())
-  {
-    cerr << pt->GetLine() << endl;
-  }
+  t.Reset();
+  t.DelNextSection();
 
   return 0;
 }

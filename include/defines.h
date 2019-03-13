@@ -6,7 +6,7 @@
 #define BufLength 81
 
 #define TextLineLength 80
-#define MemSize 20
+#define MemSize 40
 
 #define DataOK 0
 #define DataErr -1

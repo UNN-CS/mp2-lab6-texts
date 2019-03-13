@@ -24,7 +24,6 @@ void TText::PrintText(PTTextLink ptl, std::ostream &os)
     throw TextError;
 
   int lvl = 0;
-  const char *indent = "  ";
   std::stack<PTTextLink> tstack;
   PTTextLink pLink;
 
@@ -85,9 +84,11 @@ PTTextLink TText::ReadText(std::ifstream &TxtFile)
 {
   if(!TxtFile.is_open())
     throw TextError;
+
   std::stack<PTTextLink> tstack;
   std::string line;
   PTTextLink pLink;
+  int lvl = 0;
 
   std::getline(TxtFile, line);
   pLink = pFirst = CreateLink(line.c_str());
@@ -96,17 +97,39 @@ PTTextLink TText::ReadText(std::ifstream &TxtFile)
 
   while(std::getline(TxtFile, line))
   {
-    if(line == "}")
+    int newLvl = 0;
+    while(line.compare(0, indent.size(), indent) == 0)
     {
-      pLink = tstack.top();
-      tstack.pop();
+      newLvl += 1;
+      line = line.substr(indent.size());
     }
-    else if(line == "{")
+
+    if(newLvl < lvl)
     {
-      tstack.push(pLink);
-      std::getline(TxtFile, line);
-      pLink = CreateLink(line.c_str());
-      tstack.top()->SetDown(pLink);
+      for(int i = newLvl; i < lvl; ++i)
+      {
+        pLink = tstack.top();
+        tstack.pop();
+      }
+      lvl = newLvl;
+
+      pLink->SetNext(CreateLink(line.c_str()));
+      pLink = pLink->GetNext();
+    }
+    else if(newLvl > lvl)
+    {
+      if(newLvl == lvl + 1)
+      {
+        lvl = newLvl;
+
+        tstack.push(pLink);
+        pLink = CreateLink(line.c_str());
+        tstack.top()->SetDown(pLink);
+      }
+      else
+      {
+        throw TextError;
+      }
     }
     else
     {
@@ -127,6 +150,7 @@ PTTextLink TText::CreateLink(const TStr s, PTTextLink pn, PTTextLink pd)
 }
 
 TText::TText(PTTextLink pl)
+    : indent("  ")
 {
   pRoot = ::new TTextLink;
 
@@ -140,9 +164,7 @@ TText::TText(PTTextLink pl)
 }
 
 TText::~TText()
-{
-  ::delete pRoot;
-}
+{ ::delete pRoot; }
 
 PTText TText::GetCopy()
 {
@@ -197,7 +219,7 @@ bool TText::GoFirstLink()
 bool TText::GoDownLink()
 {
   if(pCurrent == NULL)
-    return false;
+    throw TextError;
 
   if(pCurrent->GetDown() == NULL)
     return false;
@@ -305,16 +327,16 @@ void TText::DelDownSection()
   if(pCurrent->GetDown() == NULL)
     throw TextError;
 
-  std::stack<PTTextLink> tstack, del;
+  //std::stack<PTTextLink> tstack, del;
   // link which will remove
   PTTextLink pDel = pCurrent->GetDown();
-  PTTextLink pLink = pDel;
+  //PTTextLink pLink = pDel;
 
   // pDown now on pDown->pNext
   pCurrent->SetDown(pDel->GetNext());
   pDel->SetNext(NULL);
 
-
+/*
   tstack.push(pDel);
   if(pDel->GetDown() != NULL)
     tstack.push(pDel->GetDown());
@@ -339,6 +361,7 @@ void TText::DelDownSection()
     del.top()->SetDown(NULL);
     del.top()->SetNext(NULL);
   }
+  */
 }
 
 void TText::DelNextLine()
@@ -361,16 +384,18 @@ void TText::DelNextSection()
 {
   if(pCurrent == NULL)
     throw TextError;
-  if(pCurrent->GetNext() != NULL)
+  if(pCurrent->GetNext() == NULL)
     throw TextError;
 
-  std::stack<PTTextLink> tstack, del;
+  //std::stack<PTTextLink> tstack, del;
   PTTextLink pDel = pCurrent->GetNext();
-  PTTextLink pLink = pDel;
+  //PTTextLink pLink = pDel;
 
+  // pNext now on pNext->pNext
   pCurrent->SetNext(pDel->GetNext());
   pDel->SetNext(NULL);
 
+  /*
   tstack.push(pDel);
   if(pDel->GetDown() != NULL)
     tstack.push(pDel->GetDown());
@@ -389,6 +414,7 @@ void TText::DelNextSection()
         tstack.push(pLink->GetDown());
     }
   }
+  */
 }
 
 /*void TText::DelNextSection()

@@ -27,13 +27,17 @@ void TTextMem::GarbageCollect()
       std::stack<PTTextLink> tstack, dstack;
       PTTextLink t = pLink;
 
-      dstack.push(t);
+      // reset
+      tstack.push(t);
       if(t->GetNext() != NULL)
         tstack.push(t->GetNext());
       if(t->GetDown() != NULL)
         tstack.push(t->GetDown());
 
-      while(!tstack.empty())
+      dstack.push(t);
+
+      // gonext
+      while(tstack.top() != pLink)
       {
         t = tstack.top();
         tstack.pop();
@@ -64,11 +68,18 @@ void TTextMem::ReturnMem()
   pFree = pFirst = pLast = NULL;
 }
 
+bool TTextMem::IsThereFreeMem() const
+{ return pFirst != NULL; }
+
 TTextMem::TTextMem():
     pFirst(NULL),
     pLast(NULL),
     pFree(NULL)
 {}
+
+TTextMem::TTextMem(std::size_t size)
+{ CreateMem(size); }
+
 
 TTextMem::~TTextMem()
 { ReturnMem(); }

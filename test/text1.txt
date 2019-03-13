@@ -1,19 +1,15 @@
 Header1
-{
-Header2
-{
-sample_text
-sample_text
-sample_text
-sample_text
-sample_text
-sample_text
-}
-end
-end
-end
-end
-}
+  Header2
+    sample_text
+    sample_text
+    sample_text
+    sample_text
+    sample_text
+    sample_text
+  end
+  end
+  end
+  end
 EoF
 EoF
 EoF

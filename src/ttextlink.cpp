@@ -37,6 +37,12 @@ void *TTextLink::operator new(std::size_t)
   {
     if(!pCurrMemControl->IsMemCreated())
       pCurrMemControl->CreateMem();
+    if(!pCurrMemControl->IsThereFreeMem())
+    {
+      pCurrMemControl->GarbageCollect();
+      if(!pCurrMemControl->IsThereFreeMem())
+        throw TextNoMem;
+    }
 
     pLink = pCurrMemControl->pFree;
     pCurrMemControl->pFree = pCurrMemControl->pFree->pNext;
