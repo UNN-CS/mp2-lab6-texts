@@ -1,6 +1,5 @@
 #include "include/ttext.h"
 #include "include/ttextlink.h"
-#include "include/ttextviewer.h"
 
 PTTextLink TText::GetFirstAtom(PTTextLink pl)
 {
@@ -40,8 +39,7 @@ void TText::PrintText(PTTextLink ptl, std::ostream &os)
     lvl += 1;
   }
 
-  os << ptl->Str << '\n';
-  //std::cerr << ptl->Str << '\n';
+  os << ptl->Str << std::endl;
 
   while(tstack.top() != ptl)
   {
@@ -49,9 +47,8 @@ void TText::PrintText(PTTextLink ptl, std::ostream &os)
     tstack.pop();
 
     for(int i = 0; i < lvl; ++i)
-      os << indent.c_str();
-    os << pLink->Str << '\n';
-    //std::cerr << pLink->Str << '\n';
+      os << indent;
+    os << pLink->Str << std::endl;
 
     if(pLink->GetNext() != NULL)
     {

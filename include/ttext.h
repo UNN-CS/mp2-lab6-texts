@@ -57,8 +57,6 @@ public:
   void Write(const char *pFileName);
 
   void Print();
-
-  friend class TTextViewer;
 };
 
 #endif

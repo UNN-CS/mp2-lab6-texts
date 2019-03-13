@@ -26,7 +26,6 @@
 
 class TTextMem;
 class TTextLink;
-class TTextViewer;
 class TDatValue;
 class TText;
 class TDataCom;
