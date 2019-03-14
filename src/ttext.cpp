@@ -25,6 +25,7 @@ void TText::PrintText(PTTextLink ptl, std::ostream &os)
 
   int lvl = 0;
   std::stack<PTTextLink> tstack;
+  std::stack<PTTextLink> headst;
   PTTextLink pLink;
 
   // reset
@@ -35,6 +36,7 @@ void TText::PrintText(PTTextLink ptl, std::ostream &os)
   }
   if(ptl->GetDown() != NULL)
   {
+    headst.push(ptl);
     tstack.push(ptl->GetDown());
     lvl += 1;
   }
@@ -56,11 +58,20 @@ void TText::PrintText(PTTextLink ptl, std::ostream &os)
     }
     if(pLink->GetDown() != NULL)
     {
+      headst.push(pLink);
       tstack.push(pLink->GetDown());
       lvl += 1;
     }
-    if(pLink->GetDown() == NULL && pLink->GetNext() == NULL)
+    else if(pLink->GetNext() == NULL)
+    {
       lvl -= 1;
+      while(!headst.empty() && headst.top()->GetNext() == NULL)
+      {
+        headst.pop();
+        lvl -= 1;
+      }
+      headst.pop();
+    }
   }
 }
 

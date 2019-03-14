@@ -7,6 +7,7 @@
 #include <iostream>
 #include <cstdio>
 #include <limits>
+#include <cstring>
 #include "include/ttext.h"
 #include "include/ttextviewer.h"
 
@@ -19,6 +20,7 @@ procedure CLEAR;
 void PAUSE();
 void __uniCLEAR();
 void __winCLEAR();
+void FLUSH();
 
 void insert();
 void remove();
@@ -37,19 +39,24 @@ int main()
     cout
         << "1. Enter path\n"
         << "2. Show text\n"
-        << "3. Insert line\n"
-        << "4. Set line\n"
-        << "5. Delete line\n"
+        << "3. Select line\n"
+        << "idl. Insert down line\n"
+        << "inl. Insert next line\n"
+        << "ids. Insert down section\n"
+        << "ins. Insert next section\n"
+        << "dd. Delete down\n"
+        << "dn. Delete next\n"
+        << "r. Replace line\n"
+        << "9. Delete text\n"
         << "0. Exit\n"
         << flush;
 
     cin >> choice;
-    cin.ignore(numeric_limits<std::streamsize>::max(), '\n');
-    cin.clear();
 
     switch(choice)
     {
     case '1':
+      FLUSH();
       char pth[256];
       CLEAR();
       cout << "Enter path" << endl;
@@ -75,6 +82,7 @@ int main()
 
     case '2':
       CLEAR();
+      FLUSH();
       if(pt == NULL)
         cout << "Select file\n";
       else
@@ -85,19 +93,120 @@ int main()
       cout << "\nPress enter...\n";
       PAUSE();
       break;
-
     case '3':
-      insert();
+      CLEAR();
+      FLUSH();
+      if(pt == NULL)
+      {
+        cout << "Select file\n"
+            << "Press enter...\n";
+        PAUSE();
+      }
+      else
+      {
+        size_t ln;
+        cout << "Enter line number\n";
+        cin >> ln;
+        FLUSH();
+        pt->Reset();
+        for(size_t i = 1; i < ln; ++i)
+        {
+          if(pt->IsTextEnded())
+            break;
+          else
+            pt->GoNext();
+        }
+      }
       break;
 
-    case '4':
+    case 'i':
+      {
+        CLEAR();
+        if(pt == NULL)
+        {
+          cout << "Select file\nPress enter...\n";
+          PAUSE();
+          break;
+        }
+        char pch[3] = {'\0'};
+        cin >> pch[0] >> pch[1];
+        FLUSH();
+
+        char buff[TextLineLength];
+        cout << "Enter line:\n";
+        cin.getline(buff, TextLineLength);
+        string s(buff);
+
+        if(strcmp("dl", pch) == 0)
+          pt->InsDownLine(s);
+        else if(strcmp("ds", pch) == 0)
+          pt->InsDownSection(s);
+        else if(strcmp("nl", pch) == 0)
+          pt->InsNextLine(s);
+        else if(strcmp("ns", pch) == 0)
+          pt->InsNextSection(s);
+        else
+        {
+          cout << "Invalid input\nPress enter...\n";
+          PAUSE();
+        }
+      }
       break;
 
-    case '5':
+    case 'd':
+      {
+        CLEAR();
+        if(pt == NULL)
+        {
+          cout << "Select file\nPress enter...\n";
+          PAUSE();
+          break;
+        }
+        char ch;
+        cin >> ch;
+        FLUSH();
+        if(ch == 'd')
+        {
+          try { pt->DelDownSection(); }
+          catch(...) {}
+        }
+        else if(ch == 'n')
+        {
+          try { pt->DelNextSection(); }
+          catch(...) {}
+        }
+        else
+        {
+          cout << "Invalid input\nPress enter...\n";
+          PAUSE();
+        }
+      }
+      break;
+
+    case 'r':
+      {
+        CLEAR();
+        if(pt == NULL)
+        {
+          cout << "Select file\nPress enter...\n";
+          PAUSE();
+          break;
+        }
+        cout << "Enter new line:\n";
+        char buff[TextLineLength];
+        FLUSH();
+        cin.getline(buff, TextLineLength);
+        pt->SetLine(string(buff));
+      }
       break;
 
     case '0':
       quit = true;
+      break;
+
+    case '9':
+      delete pt;
+      pt = NULL;
       break;
 
     default:
@@ -108,6 +217,10 @@ int main()
       break;
   }
 return 0;
+}
+
+void openFile(PTText *ppt)
+{
 }
 
 
@@ -125,7 +238,13 @@ void __uniCLEAR()
 void PAUSE()
 {
   char ch;
-  while((ch = getchar()) != '\n');
+  while((ch = cin.get()) != '\n');
+}
+
+void FLUSH()
+{
+  std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+  std::cin.clear();
 }
 
 void insert()

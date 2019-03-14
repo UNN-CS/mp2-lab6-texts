@@ -8,6 +8,7 @@ void TTextViewer::print_n(std::ostream &os)
   int counter = 1;
   int lvl = 0;
   std::stack<PTTextLink> tstack;
+  std::stack<PTTextLink> headst;
   PTTextLink pLink = pText->pFirst;
 
   tstack.push(pLink);
@@ -21,23 +22,33 @@ void TTextViewer::print_n(std::ostream &os)
 
   while(tstack.top() != pText->pFirst)
   {
-    if(pLink->GetDown() != NULL)
-      lvl += 1;
-    else if(pLink->GetNext() == NULL)
-      lvl -= 1;
-
     pLink = tstack.top();
     tstack.pop();
-    if(pLink->GetNext() != NULL)
-      tstack.push(pLink->GetNext());
-    if(pLink->GetDown() != NULL)
-      tstack.push(pLink->GetDown());
 
     os << counter << "\t: ";
     for(int i = 0; i < lvl; ++i)
       os << pText->indent;
     os << pLink->Str << std::endl;
     counter += 1;
+
+    if(pLink->GetNext() != NULL)
+      tstack.push(pLink->GetNext());
+    if(pLink->GetDown() != NULL)
+    {
+      headst.push(pLink);
+      tstack.push(pLink->GetDown());
+      lvl += 1;
+    }
+    else if(pLink->GetNext() == NULL)
+    {
+      lvl -= 1;
+      while(!headst.empty() && headst.top()->GetNext() == NULL)
+      {
+        headst.pop();
+        lvl -= 1;
+      }
+      headst.pop();
+    }
   }
 }
 
@@ -45,6 +56,7 @@ void TTextViewer::print_p(std::ostream &os)
 {
   int lvl = 0;
   std::stack<PTTextLink> tstack;
+  std::stack<PTTextLink> headst;
   PTTextLink pLink = pText->pFirst;
   PTTextLink pCurr = pText->pCurrent;
 
@@ -52,7 +64,11 @@ void TTextViewer::print_p(std::ostream &os)
   if(pLink->GetNext() != NULL)
     tstack.push(pLink->GetNext());
   if(pLink->GetDown() != NULL)
+  {
+    headst.push(pLink);
     tstack.push(pLink->GetDown());
+    lvl += 1;
+  }
 
   if(pCurr == pLink)
     os << "=> ";
@@ -62,17 +78,8 @@ void TTextViewer::print_p(std::ostream &os)
 
   while(tstack.top() != pText->pFirst)
   {
-    if(pLink->GetDown() != NULL)
-      lvl += 1;
-    else if(pLink->GetNext() == NULL)
-      lvl -= 1;
-
     pLink = tstack.top();
     tstack.pop();
-    if(pLink->GetNext() != NULL)
-      tstack.push(pLink->GetNext());
-    if(pLink->GetDown() != NULL)
-      tstack.push(pLink->GetDown());
 
     if(pCurr == pLink)
       os << "=> ";
@@ -81,6 +88,25 @@ void TTextViewer::print_p(std::ostream &os)
     for(int i = 0; i < lvl; ++i)
       os << pText->indent;
     os << pLink->Str << std::endl;
+
+    if(pLink->GetNext() != NULL)
+      tstack.push(pLink->GetNext());
+    if(pLink->GetDown() != NULL)
+    {
+      headst.push(pLink->GetNext());
+      tstack.push(pLink->GetDown());
+      lvl += 1;
+    }
+    else if(pLink->GetNext() == NULL)
+    {
+      lvl -= 1;
+      while(!headst.empty() && headst.top()->GetNext() == NULL)
+      {
+        headst.pop();
+        lvl -= 1;
+      }
+      headst.pop();
+    }
   }
 }
 
@@ -89,14 +115,20 @@ void TTextViewer::print_pn(std::ostream &os)
   int counter = 1;
   int lvl = 0;
   std::stack<PTTextLink> tstack;
+  std::stack<PTTextLink> headst;
   PTTextLink pLink = pText->pFirst;
   PTTextLink pCurr = pText->pCurrent;
 
+  // reset
   tstack.push(pLink);
   if(pLink->GetNext() != NULL)
     tstack.push(pLink->GetNext());
   if(pLink->GetDown() != NULL)
+  {
+    headst.push(pLink);
     tstack.push(pLink->GetDown());
+    lvl += 1;
+  }
 
   if(pCurr == pLink)
     os << "=> ";
@@ -104,20 +136,12 @@ void TTextViewer::print_pn(std::ostream &os)
     os << "   ";
   os << counter << "\t: ";
   os << pLink->Str << std::endl;
+  counter += 1;
 
   while(tstack.top() != pText->pFirst)
   {
-    if(pLink->GetDown() != NULL)
-      lvl += 1;
-    else if(pLink->GetNext() == NULL)
-      lvl -= 1;
-
     pLink = tstack.top();
     tstack.pop();
-    if(pLink->GetNext() != NULL)
-      tstack.push(pLink->GetNext());
-    if(pLink->GetDown() != NULL)
-      tstack.push(pLink->GetDown());
 
     if(pCurr == pLink)
       os << "=> ";
@@ -128,6 +152,26 @@ void TTextViewer::print_pn(std::ostream &os)
       os << pText->indent;
     os << pLink->Str << std::endl;
     counter += 1;
+
+    if(pLink->GetNext() != NULL)
+      tstack.push(pLink->GetNext());
+    if(pLink->GetDown() != NULL)
+    {
+      headst.push(pLink);
+      tstack.push(pLink->GetDown());
+      lvl += 1;
+    }
+    else if(pLink->GetNext() == NULL)
+    {
+      lvl -= 1;
+      while(!headst.empty() && headst.top()->GetNext() == NULL)
+      {
+        headst.pop();
+        lvl -= 1;
+      }
+      headst.pop();
+    }
+
   }
 }
 
