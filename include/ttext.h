@@ -28,10 +28,10 @@ public:
 	PTText GetCopy();
 
 	// навигация
-	int GoFirstLink();
-	int GoDownLink();
-	int GoNextLink();
-	int GoPrevLink();
+	void GoFirstLink();
+	void GoDownLink();
+	void GoNextLink();
+	void GoPrevLink();
 
 	// доступ
 	std::string GetLine();
