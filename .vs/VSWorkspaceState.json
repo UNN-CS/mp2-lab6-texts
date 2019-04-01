@@ -1,0 +1,14 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\files",
+    "\\gtest",
+    "\\images",
+    "\\include",
+    "\\samples",
+    "\\src",
+    "\\test"
+  ],
+  "SelectedNode": "\\test\\test_main.cpp",
+  "PreviewInSolutionExplorer": false
+}
