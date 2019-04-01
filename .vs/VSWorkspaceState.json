@@ -1,0 +1,13 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\include",
+    "\\samples",
+    "\\src",
+    "\\test",
+    "\\test\\src",
+    "\\test\\test"
+  ],
+  "SelectedNode": "\\test\\test_main.cpp",
+  "PreviewInSolutionExplorer": false
+}
