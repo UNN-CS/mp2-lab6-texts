@@ -1,6 +1,7 @@
 #define BufLength 80
 #include <conio.h>
 #include "ttext.h"
+#include <iostream>
 
 using namespace std;
 
@@ -30,7 +31,7 @@ void TText::GoDownLink()
 	if ((pCurrent != nullptr) && (pCurrent->pDown != nullptr))
 	{
 		Path.push(pCurrent);
-		pCurrent = pDown;
+		pCurrent = pCurrent->pDown;
 	}
 	else
 		throw "Text error";
@@ -156,7 +157,7 @@ void TText::DelNextLine()
 	//
 }
 
-void TText::DelNextSection
+void TText::DelNextSection()
 {
 	//тут должен быть код...
 	//
@@ -191,9 +192,9 @@ int TText::GoNext()
 	{
 		pCurrent = St.top();
 		St.pop();
-		if (pCurrent->Next != nullptr)
+		if (pCurrent->pNext != nullptr)
 			St.push(pCurrent->pNext);
-		if (pCurrent->Down != nullptr)
+		if (pCurrent->pDown != nullptr)
 			St.push(pCurrent->pDown);
 	}
 	return IsTextEnded();
@@ -259,22 +260,22 @@ void TText::Print()
 	PrintText(pFirst);
 }
 
-void TText::PrintText(PTTextLink pt1)
+void TText::PrintText(PTTextLink ptl)
 {
 	if (ptl != nullptr)
 	{
 		for (int i = 0; i < TextLevel; i++)
-			cout << "  ";
-		cout << " " << *ptl << endl;
+			std:cout << "  ";
+		std::cout << " " << ptl->Str << std::endl;
 		++TextLevel; PrintText(ptl->GetDown());
-		--TextLevel; Printtext(ptl->GetNext());
+		--TextLevel; PrintText(ptl->GetNext());
 	}
 }
-
+/*
 //чтение текста из файла
 void TText::Read(char *pFileName)
 {
-	ifstream TxtFile(pFileName);
+	std::ifstream TxtFile(pFileName);
 	TextLevel = 0;
 	if (TxtFile != nullptr)
 		pFirst = ReadText(TxtFile);
@@ -295,11 +296,11 @@ PTTextLink TText::ReadText(ifstream &TxtFile)
 		else if (StrBuf[0] == '{')
 		{
 			++TextLevel;
-			ptl->Down = ReadText(TxtFile);
+			ptl->pDown = ReadText(TxtFile);
 		}
 		else
 		{
-			ptl->Next = new TTextLink(StrBuf, nullptr, nullptr);
+			ptl->pNext = new TTextLink(StrBuf, nullptr, nullptr);
 			ptl = ptl->pNext;
 		}
 	}
@@ -311,3 +312,4 @@ PTTextLink TText::ReadText(ifstream &TxtFile)
 	}
 	return pHead;
 }
+*/

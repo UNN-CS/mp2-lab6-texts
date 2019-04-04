@@ -2,7 +2,7 @@
 #define __TEXT_H
 
 #include <stack>
-#include <fstream.h>
+//
 #include "tdatacom.h"
 #include "textlink.h"
 
@@ -20,7 +20,7 @@ protected:
 	std::stack<PTTextLink> St;
 	PTTextLink GetFirstAtom(PTTextLink pl);
 	void PrintText(PTTextLink ptl);
-	PTTextLink ReadText(ifstream &TxtFile);
+	//PTTextLink ReadText(ifstream &TxtFile);
 
 public:
 	TText(PTTextLink pl = nullptr);
@@ -53,8 +53,8 @@ public:
 	int GoNext(); // переход к следующей записи
 
 	//работа с файлами
-	void Read(char *pFileName); // ввод текста из файла
-	void Write(char *pFileName);// вывод текста в файл
+	//void Read(char *pFileName); // ввод текста из файла
+	//void Write(char *pFileName);// вывод текста в файл
 
 	// печать
 	void Print();

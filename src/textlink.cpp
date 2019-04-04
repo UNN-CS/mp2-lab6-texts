@@ -1,6 +1,7 @@
 #include <conio.h>
 #include "textlink.h"
 #include "ttext.h"
+#include <iostream>
 
 void TTextLink::InitMemSystem(int size) // инициализация памяти
 {
@@ -35,12 +36,12 @@ void * TTextLink::operator new(size_t size)
 
 void TTextLink:: operator delete(void* pM){}
 
-void TTextLink::MemCleaner(const TText &txt)
+void TTextLink::MemCleaner(TText &txt)
 {
-	string st;
+	std::string st;
 
 	for (txt.Reset(); !txt.IsTextEnded(); txt.GoNext())
-		if (st.find("&&&") != 0) txt.SetLine("&&&" + txt.Getline());
+		if (st.find("&&&") != 0) txt.SetLine("&&&" + txt.GetLine());
 
 	PTTextLink pLink = MemHeader.pFree;
 	while (pLink != nullptr)

@@ -1,9 +1,8 @@
 #ifndef __TEXTLINK_H
 #define __TEXTLINK_H
 
-#include <alloc.h>
 #include <string.h>
-#include "datvalue.h"
+#include "tdatvalue.h"
 
 #define TextLineLength 20
 #define MemSize 20
@@ -34,8 +33,8 @@ public:
 	static void PrintFreeLink();
 	void * operator new (size_t size);
 	void operator delete(void *pM);
-	static void MemCleaner(const TText &txt);
-	TTextLink(TStr s = nullptr, PTTextLink = nullptr, PTTextLink pd = nullptr)
+	static void MemCleaner(TText &txt);
+	TTextLink(TStr s = nullptr, PTTextLink pn = nullptr, PTTextLink pd = nullptr)
 	{
 		pNext = pn;
 		pDown - pd;
@@ -51,7 +50,7 @@ public:
 	TDatValue * GetCopy() { return new TTextLink(Str, pNext, pDown); }
 
 protected: 
-	virtual void Print(ostream &os) { os << Str; }
+	virtual void Print(std::ostream &os) { os << Str; }
 	friend class TText;
 };
 #endif
