@@ -24,7 +24,7 @@ protected:
 public:
  TText (PTTextLink pl = NULL);
  ~TText () {pFirst =NULL;}
- PTText getCopy();
+ PTText GetCopy();
 // навигация
  int GoFirstLink (void); // переход к первой строке
  int GoDownLink (void);  // переход к следующей строке по Down

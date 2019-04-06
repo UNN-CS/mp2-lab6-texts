@@ -1,4 +1,7 @@
 #include "TTextLink.h"
+#include "TText.h"
+
+TTextMem TTextLink::MemHeader;
 
 void TTextLink::InitMemSystem(int size)
 {
@@ -13,7 +16,7 @@ void TTextLink::InitMemSystem(int size)
 void TTextLink::PrintFreeLink (void)
 {
     for (PTTextLink p = MemHeader.pFree; p != NULL; p = p->pNext)
-        std::cout << p->Str;
+        std::cout << p->Str << '\n';
 }
 
 void* TTextLink::operator new(size_t size)
@@ -26,12 +29,23 @@ void* TTextLink::operator new(size_t size)
 
 void TTextLink::operator delete (void *pM)
 {
-
+    PTTextLink p = (PTTextLink)pM;
+    p->pDown = NULL;
+    p->pNext = MemHeader.pFree;
+    MemHeader.pFree = p;
 }
 
-void TTextLink::MemCleaner (const TText &txt)
+void TTextLink::MemCleaner (TText &txt)
 {
-
+    for (txt.Reset(); !txt.IsTextEnded(); txt.GoNext())
+        txt.SetLine("&&&" + txt.GetLine());
+    for (PTTextLink p = MemHeader.pFree; p != NULL; p = p->pNext)
+        strcpy(p->Str, "&&&");
+    for (PTTextLink p = MemHeader.pFirst; p <= MemHeader.pLast; ++p)
+        if (strstr(p->Str, "&&&") != NULL)
+            strcpy(p->Str, p->Str + 3);
+        else
+            delete p;
 }
 
 
