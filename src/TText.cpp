@@ -1,5 +1,4 @@
 #define BufLength 80
-#include <conio.h>
 #include <iostream>
 #include "stdio.h"
 #include <string.h>

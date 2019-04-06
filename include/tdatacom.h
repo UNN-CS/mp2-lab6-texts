@@ -1,4 +1,4 @@
-// ННГУ, ВМК, Курс "Методы программирования-2", С++, ООП
+﻿// ННГУ, ВМК, Курс "Методы программирования-2", С++, ООП
 //
 // tdatacom.h - Copyright (c) Гергель В.П. 30.08.2000
 //   Переработано для Microsoft Visual Studio 2008 Сысоевым А.В. (21.04.2015)
@@ -20,7 +20,7 @@ protected:
   int SetRetCode(int ret) { return RetCode = ret; }
 public:
   TDataCom(): RetCode(DataOK) {}
-  virtual ~TDataCom() = 0 {}
+  virtual ~TDataCom() {}
   int GetRetCode()
   {
     int temp = RetCode;
