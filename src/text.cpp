@@ -7,10 +7,10 @@ static char StrBuf[BufLength+1]; // буфер для ввода строк
 static int TextLevel;            // номер текущего уровня текста
 
 TText::TText(PTTextLink pl) {
-
     if(pl == nullptr)
         pl = new TTextLink();
     pFirst = pl;
+	pCurrent = pFirst;
 }
 
 //навигация
@@ -83,10 +83,24 @@ void TText::InsDownSection(std::string s) { // вставка раздела в подуровень
 }
 
 void TText::InsNextLine(std::string s) { // вставка строки в том же уровне
+    if(pCurrent == nullptr)
+        throw TextError;
+    PTTextLink pd = pCurrent->pNext;
+    PTTextLink pl = new TTextLink("", pd, nullptr); // ?????
+    strncpy(pl->Str, s.c_str(), TextLineLength);
+    pl->Str[TextLineLength-1] = '\0';
+    pCurrent->pNext = pl;
     // >:-/
 }
 
 void TText::InsNextSection(std::string s) { // вставка раздела в том же уровне
+    if(pCurrent == nullptr)
+        throw TextError;
+    PTTextLink pd = pCurrent->pNext;
+    PTTextLink pl = new TTextLink("", nullptr, pd);
+    strncpy(pl->Str, s.c_str(), TextLineLength);
+    pl->Str[TextLineLength-1] = '\0';
+    pCurrent->pNext = pl;
     // >:-/
 }
 
@@ -113,10 +127,25 @@ void TText::DelDownSection() { // удаление раздела в подуровне
 }
 
 void TText::DelNextLine() { // удаление строки в том же уровне
+    if(pCurrent == nullptr)
+        throw TextError;
+    if(pCurrent->pNext != nullptr) {
+        PTTextLink pl1 = pCurrent->pNext;
+        PTTextLink pl2 = pl1->pNext;
+        if(pl1->pNext == nullptr)
+            pCurrent->pNext = pl2;
+    }
     // >:-/
 }
 
 void TText::DelNextSection() { // удаление раздела в том же уровне
+    if(pCurrent == nullptr)
+        throw TextError;
+    if(pCurrent->pNext != nullptr) {
+        PTTextLink pl1 = pCurrent->pNext;
+        PTTextLink pl2 = pl1->pNext;
+        pCurrent->pNext = pl2;
+    }
     // >:-/
 }
 
@@ -184,9 +213,16 @@ PTText TText::GetCopy() { // копирование текста
                 if(strstr(pl1->Str, "Copy") == nullptr) { // первый этап создания копии
                     // создание копии - pDown на уже скопированный подуровень
                     pl2 = new TTextLink("Copy", pl1, cpl); // pNext на оригинал
+                    St.push(pl2);
+                    pl = pl1->pNext;
+                    cpl = nullptr;
                     // >:-/
                 }
                 else { // второй этап создания копии
+                        pl2 = pl1->GetNext();
+                        strcpy(pl1->Str, pl2->Str);
+                        pl1->pNext = cpl;
+                        cpl = pl1;
                     // >:-/
                 }
             }
@@ -205,6 +241,9 @@ void TText::PrintText(PTTextLink ptl) {
     if(ptl != nullptr) {
         for(int i = 0; i < TextLevel; i++)
             std::cout<<" ";
+        std::cout<<" ";
+        ptl->Print(std::cout);
+        std::cout<<std::endl;
         TextLevel++;
         PrintText(ptl->GetDown());
         TextLevel--;

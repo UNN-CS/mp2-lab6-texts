@@ -3,7 +3,7 @@
 
 #include <string.h>
 #include "datvalue.h"
-
+//#include "text.h"
 #define TextLineLength 20
 #define MemSize        20
 

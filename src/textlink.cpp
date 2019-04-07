@@ -1,13 +1,15 @@
 #include "textlink.h"
 #include "text.h"
 
+TTextMem TTextLink::MemHeader;
+
 void TTextLink::InitMemSystem(int size) { // инициализация памяти
     char Line[100];
     MemHeader.pFirst = (PTTextLink) new char[sizeof(TTextLink)*size];
     MemHeader.pFree = MemHeader.pFirst;
     MemHeader.pLast = MemHeader.pFirst + (size-1);
     PTTextLink pLink = MemHeader.pFirst;
-    for(int i = 0; i < size-1; i++) { // размерка памяти
+    for(int i = 0; i < size-1; i++, pLink++) { // размерка памяти
         pLink->pNext = pLink+1;
     }
     pLink->pNext = NULL;
@@ -27,6 +29,13 @@ void * TTextLink::operator new(size_t size) { // выделение звена
 }
 
 void TTextLink::operator delete(void *pM) {//освобождение звена
+    if(pM!=nullptr)
+    {
+        ((PTTextLink)pM)->pNext = MemHeader.pFree;
+        MemHeader.pFree = (PTTextLink)pM;
+    }
+    else
+        throw TextError;
     // >:-/
 }
 
@@ -35,10 +44,10 @@ void TTextLink::operator delete(void *pM) {//освобождение звена
 void TTextLink::MemCleaner(TText &txt) {//сборка мусора
     std::string st;
     for(txt.Reset(); !txt.IsTextEnded(); txt.GoNext()) {
+        st = txt.GetLine();
         if(st.find("&&&") != 0)
             txt.SetLine("&&&" + txt.GetLine());
     }
-
     PTTextLink pLink = MemHeader.pFree;
     for(; pLink != nullptr; pLink = pLink->pNext)
         strcpy(pLink->Str, "&&&");
