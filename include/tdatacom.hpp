@@ -8,8 +8,8 @@
 #ifndef __DATACOM_H__
 #define __DATACOM_H__
 
-#define DataOK   0
-#define DataErr -1
+#define DATAOK 0
+#define DATAERR -1
 
 // TDataCom является общим базовым классом
 class TDataCom
@@ -18,13 +18,14 @@ protected:
   int RetCode; // Код завершения
 
   int SetRetCode(int ret) { return RetCode = ret; }
+
 public:
-  TDataCom(): RetCode(DataOK) {}
+  TDataCom() : RetCode(DATAOK) {}
   virtual ~TDataCom() = 0 {}
   int GetRetCode()
   {
     int temp = RetCode;
-    RetCode = DataOK;
+    RetCode = DATAERR;
     return temp;
   }
 };
