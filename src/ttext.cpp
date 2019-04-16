@@ -2,8 +2,8 @@
 #include <conio.h>
 #include "ttext.h"
 #include <iostream>
+#include <fstream>
 
-using namespace std;
 
 static char StrBuf[BufLength + 1];
 static int TextLevel;
@@ -12,7 +12,7 @@ TText::TText(PTTextLink pl)
 {
 	if (pl == nullptr) 
 		pl = new TTextLink();
-	pFirst = pl;
+	pCurrent = pFirst = pl;
 }
 
 // навигация
@@ -41,10 +41,8 @@ void TText::GoNextLink()
 {
 	if ((pCurrent != nullptr) && (pCurrent->pNext != nullptr))
 	{
-		//здесь должен быть какой-то код....
-		//
-		//
-		//
+		Path.push(pCurrent);
+		pCurrent = pCurrent->pNext;
 	}
 	else
 		throw "text error";
@@ -62,15 +60,15 @@ void TText::GoPrevLink()
 }
 
 //доступ
-string TText::GetLine()
+std::string TText::GetLine()
 {
-	if (pCurrent = nullptr)
-		return string("");
+	if (pCurrent == nullptr)
+		return std::string("");
 	else 
-		return string(pCurrent->Str);
+		return pCurrent->Str;
 }
 
-void TText::SetLine(string s)
+void TText::SetLine(std::string s)
 {
 	if (pCurrent == nullptr)
 		throw "text error";
@@ -80,7 +78,7 @@ void TText::SetLine(string s)
 }
 
 // модификация
-void TText::InsDownLine(string s)
+void TText::InsDownLine(std::string s)
 {
 	if (pCurrent == nullptr)
 		throw "text error";
@@ -94,7 +92,7 @@ void TText::InsDownLine(string s)
 	}
 }
 
-void TText::InsDownSection(string s)
+void TText::InsDownSection(std::string s)
 {
 	if (pCurrent = nullptr)
 		throw "text error";
@@ -108,20 +106,30 @@ void TText::InsDownSection(string s)
 	}
 }
 
-void TText::InsNextLine(string s)
+void TText::InsNextLine(std::string s)
 {
-	//тут должен быть код...
-	//
-	//
-	//
+	if (pCurrent == nullptr)
+		throw "text error";
+	else {
+		PTTextLink pd = pCurrent->pNext;
+		PTTextLink pl = new TTextLink("", pd, nullptr);
+		strncpy(pl->Str, s.c_str(), TextLineLength);
+		pl->Str[TextLineLength - 1] = '\0';
+		pCurrent->pNext = pl;
+	}
 }
 
-void TText::InsNextSection(string s)
+void TText::InsNextSection(std::string s)
 {
-	//тут должен быть код...
-	//
-	//
-	//
+	if (pCurrent == nullptr)
+		throw "text error";
+	else {
+		PTTextLink pd = pCurrent->pNext;
+		PTTextLink pl = new TTextLink("", nullptr, pd);
+		strncpy(pl->Str, s.c_str(), TextLineLength);
+		pl->Str[TextLineLength - 1] = '\0';
+		pCurrent->pNext = pl;
+	}
 }
 
 void TText::DelDownLine()
@@ -151,18 +159,26 @@ void TText::DelDownSection()
 
 void TText::DelNextLine() 
 {
-	//тут должен быть код...
-	//
-	//
-	//
+	if (pCurrent == nullptr)
+		throw "text error";
+	else if (pCurrent->pNext != nullptr)
+	{
+		PTTextLink pl1 = pCurrent->pNext;
+		PTTextLink pl2 = pl1->pNext;
+		if (pl1->pNext == nullptr)
+			pCurrent->pNext = pl2;
+	}
 }
 
 void TText::DelNextSection()
 {
-	//тут должен быть код...
-	//
-	//
-	//
+	if (pCurrent == nullptr)
+		throw "text error";
+	else if (pCurrent->pNext != nullptr) {
+		PTTextLink pl1 = pCurrent->pNext;
+		PTTextLink pl2 = pl1->pNext;
+		pCurrent->pNext = pl2;
+	}
 }
 
 int TText::Reset()
@@ -235,17 +251,16 @@ PTText TText::GetCopy()
 				if (strstr(pl1->Str, "Copy") == nullptr)
 				{
 					pl2 = new TTextLink("Copy", pl1, cpl);
-					//тут должен быть код...
-					//
-					//
-					//
+					St.push(pl2);
+					pl = pl1->pNext;
+					cpl = nullptr;
 				}
 				else 
 				{
-					//тут должен быть код...
-					//
-					//
-					//
+					pl2 = pl1->GetNext();
+					strcpy(pl1->Str, pl2->Str);
+					pl1->pNext = cpl;
+					cpl = pl1;
 				}
 			}
 		}
@@ -265,51 +280,41 @@ void TText::PrintText(PTTextLink ptl)
 	if (ptl != nullptr)
 	{
 		for (int i = 0; i < TextLevel; i++)
-			std:cout << "  ";
+			std::cout << "  ";
 		std::cout << " " << ptl->Str << std::endl;
 		++TextLevel; PrintText(ptl->GetDown());
 		--TextLevel; PrintText(ptl->GetNext());
 	}
 }
-/*
+
 //чтение текста из файла
-void TText::Read(char *pFileName)
+void TText::Read(const char *pFileName)
 {
 	std::ifstream TxtFile(pFileName);
 	TextLevel = 0;
-	if (TxtFile != nullptr)
-		pFirst = ReadText(TxtFile);
+	if (!TxtFile.is_open())
+		throw -1;
+	pFirst = ReadText(TxtFile);
 }
 
-PTTextLink TText::ReadText(ifstream &TxtFile)
+PTTextLink TText::ReadText(std::ifstream &TxtFile)
 {
 	PTTextLink pHead, ptl;
 	pHead = ptl = new TTextLink();
-	while (TxtFile.eof() == 0)
-	{
+	while (TxtFile.eof() == 0) {
 		TxtFile.getline(StrBuf, BufLength, '\n');
-		if (StrBuf[0] == '}')
-		{
-			--TextLevel; 
+		if (StrBuf[0] == '}') {
+			TextLevel--;
 			break;
 		}
-		else if (StrBuf[0] == '{')
-		{
-			++TextLevel;
-			ptl->pDown = ReadText(TxtFile);
-		}
-		else
-		{
+		else if (StrBuf[0] == '{') { 
 			ptl->pNext = new TTextLink(StrBuf, nullptr, nullptr);
 			ptl = ptl->pNext;
 		}
 	}
 	ptl = pHead;
-	if (pHead->pDown == nullptr)
-	{
+	if (pHead->pDown == nullptr) { 
 		pHead = pHead->pNext;
 		delete ptl;
 	}
 	return pHead;
-}
-*/
