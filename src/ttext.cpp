@@ -307,14 +307,15 @@ PTTextLink TText::ReadText(std::ifstream &TxtFile)
 			TextLevel--;
 			break;
 		}
-		else if (StrBuf[0] == '{') { 
+		else if (StrBuf[0] == '{') {
 			ptl->pNext = new TTextLink(StrBuf, nullptr, nullptr);
 			ptl = ptl->pNext;
 		}
 	}
 	ptl = pHead;
-	if (pHead->pDown == nullptr) { 
+	if (pHead->pDown == nullptr) {
 		pHead = pHead->pNext;
 		delete ptl;
 	}
 	return pHead;
+}

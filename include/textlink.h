@@ -3,6 +3,7 @@
 
 #include <string.h>
 #include "tdatvalue.h"
+#include <iostream>
 
 #define TextLineLength 20
 #define MemSize 20
