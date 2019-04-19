@@ -19,7 +19,7 @@ TTextLink::TTextLink(const TStr s, PTTextLink pn, PTTextLink pd)
     pn->refCount += 1;
 }
 
-TTextLink::TTextLink(){}
+TTextLink::TTextLink(): refCount(0), pNext(NULL), pDown(NULL), pMemControl(NULL) {}
 
 TTextLink::~TTextLink(){}
 
