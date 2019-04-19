@@ -13,22 +13,12 @@
 
 using namespace std;
 
-typedef void __proc();
-typedef __proc *procedure;
-
-procedure CLEAR;
+void CLEAR();
 void PAUSE();
-void __uniCLEAR();
-void __winCLEAR();
 void FLUSH();
-
-void insert();
-void remove();
-void setl();
 
 int main()
 {
-  CLEAR = __uniCLEAR;
   PTText pt = NULL;
   char choice;
   bool quit = false;
@@ -37,18 +27,18 @@ int main()
   {
     CLEAR();
     cout
-        << "1. Enter path\n"
-        << "2. Show text\n"
-        << "3. Select line\n"
+        << "1.   Enter path\n"
+        << "2.   Show text\n"
+        << "3.   Select line\n"
         << "idl. Insert down line\n"
         << "inl. Insert next line\n"
         << "ids. Insert down section\n"
         << "ins. Insert next section\n"
-        << "dd. Delete down\n"
-        << "dn. Delete next\n"
-        << "r. Replace line\n"
-        << "9. Delete text\n"
-        << "0. Exit\n"
+        << "dd.  Delete down\n"
+        << "dn.  Delete next\n"
+        << "r.   Replace line\n"
+        << "9.   Delete text\n"
+        << "0.   Exit\n"
         << flush;
 
     cin >> choice;
@@ -219,20 +209,14 @@ int main()
 return 0;
 }
 
-void openFile(PTText *ppt)
+
+void CLEAR()
 {
-}
-
-
-
-void __winCLEAR()
-{
+#if defined(_WIN32) || defined(_WIN64)
   system("cls");
-}
-
-void __uniCLEAR()
-{
+#else
   system("clear");
+#endif
 }
 
 void PAUSE()
@@ -245,17 +229,5 @@ void FLUSH()
 {
   std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
   std::cin.clear();
-}
-
-void insert()
-{
-}
-
-void remove()
-{
-}
-
-void setl()
-{
 }
 
