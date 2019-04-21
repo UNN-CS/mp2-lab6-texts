@@ -4,7 +4,7 @@
 #include <string>
 #include "tdatvalue.h"
 #include <iostream>
-#include <string>
+#include <cstring>
 #include "ttext.h"
 
 class TText;
@@ -38,7 +38,7 @@ public:
 		pNext = pn;
 		pDown = pd;
 		if (s != nullptr)
-			std::strcpy(Str, s);
+			strcpy(Str, s);
 		else
 			Str[0] = '\0';
 	}
