@@ -1,7 +1,7 @@
 #ifndef __TEXTLINK_H__
 #define __TEXTLINK_H__
 
-#include <string>
+#include "string.h"
 #include <iostream>
 #include "TDatValue.h"
 

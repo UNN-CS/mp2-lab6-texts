@@ -1,5 +1,6 @@
 #include "TTextLink.h"
 #include "TText.h"
+using namespace std;
 
 TTextMem TTextLink::MemHeader;
 

@@ -1,4 +1,5 @@
 #include "TText.h"
+using namespace std;
 
 PTTextLink TText::GetFirstAtom(PTTextLink pl)
 {
