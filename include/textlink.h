@@ -36,9 +36,9 @@ public:
 	TTextLink(TStr s = nullptr, PTTextLink pn = nullptr, PTTextLink pd = nullptr)
 	{
 		pNext = pn;
-		pDown - pd;
+		pDown = pd;
 		if (s != nullptr)
-			strcpy(Str, s);
+			std::strcpy(Str, s);
 		else
 			Str[0] = '\0';
 	}

@@ -72,7 +72,7 @@ void TText::SetLine(std::string s)
 	if (pCurrent == nullptr)
 		throw "text error";
 	else
-		strncpy(pCurrent->Str, s.c_str(), TextLineLength);
+		std::strncpy(pCurrent->Str, s.c_str(), TextLineLength);
 	pCurrent->Str[TextLineLength - 1] = '\0';
 }
 
@@ -85,7 +85,7 @@ void TText::InsDownLine(std::string s)
 	{
 		PTTextLink pd = pCurrent->pDown;
 		PTTextLink pl = new TTextLink("", pd, nullptr);
-		strncpy(pl->Str, s.c_str(), TextLineLength);
+		std::strncpy(pl->Str, s.c_str(), TextLineLength);
 		pl->Str[TextLineLength - 1] = '\0';
 		pCurrent->pDown = pl;
 	}
@@ -93,13 +93,13 @@ void TText::InsDownLine(std::string s)
 
 void TText::InsDownSection(std::string s)
 {
-	if (pCurrent = nullptr)
+	if (pCurrent == nullptr)
 		throw "text error";
 	else
 	{
 		PTTextLink pd = pCurrent->pDown;
 		PTTextLink pl = new TTextLink("", nullptr, pd);
-		strncpy(pl->Str, s.c_str(), TextLineLength);
+		std::strncpy(pl->Str, s.c_str(), TextLineLength);
 		pl->Str[TextLineLength - 1] = '\0';
 		pCurrent->pDown = pl;
 	}
@@ -112,7 +112,7 @@ void TText::InsNextLine(std::string s)
 	else {
 		PTTextLink pd = pCurrent->pNext;
 		PTTextLink pl = new TTextLink("", pd, nullptr);
-		strncpy(pl->Str, s.c_str(), TextLineLength);
+		std::strncpy(pl->Str, s.c_str(), TextLineLength);
 		pl->Str[TextLineLength - 1] = '\0';
 		pCurrent->pNext = pl;
 	}
@@ -125,7 +125,7 @@ void TText::InsNextSection(std::string s)
 	else {
 		PTTextLink pd = pCurrent->pNext;
 		PTTextLink pl = new TTextLink("", nullptr, pd);
-		strncpy(pl->Str, s.c_str(), TextLineLength);
+		std::strncpy(pl->Str, s.c_str(), TextLineLength);
 		pl->Str[TextLineLength - 1] = '\0';
 		pCurrent->pNext = pl;
 	}
@@ -133,7 +133,7 @@ void TText::InsNextSection(std::string s)
 
 void TText::DelDownLine()
 {
-	if (pCurrent = nullptr)
+	if (pCurrent == nullptr)
 		throw "text error";
 	else if(pCurrent->pDown != nullptr)
 	{
@@ -247,7 +247,7 @@ PTText TText::GetCopy()
 			else
 			{
 				pl1 = St.top(); St.pop();
-				if (strstr(pl1->Str, "Copy") == nullptr)
+				if (std::strstr(pl1->Str, "Copy") == nullptr)
 				{
 					pl2 = new TTextLink("Copy", pl1, cpl);
 					St.push(pl2);
@@ -257,7 +257,7 @@ PTText TText::GetCopy()
 				else 
 				{
 					pl2 = pl1->GetNext();
-					strcpy(pl1->Str, pl2->Str);
+					std::strcpy(pl1->Str, pl2->Str);
 					pl1->pNext = cpl;
 					cpl = pl1;
 				}
