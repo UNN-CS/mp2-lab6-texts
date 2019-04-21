@@ -159,7 +159,7 @@ void TText::SetLine(std::string s)
 	if (pCurrent == NULL)
 		SetRetCode(DataErr);
 	else
-		strcpy_s(pCurrent->Str, TextLineLength, s.c_str());
+		strncpy(pCurrent->Str, s.c_str(), TextLineLength);
 }
 
 void TText::InsDownLine(std::string s)
@@ -169,7 +169,7 @@ void TText::InsDownLine(std::string s)
 	else
 	{
 		PTTextLink t = new TTextLink;
-		strcpy_s(t->Str, TextLineLength, s.c_str());
+		strncpy(t->Str, s.c_str(), TextLineLength);
 		t->pNext = pCurrent->GetDown();
 		pCurrent->pDown = t;
 		GoDownLink();
@@ -184,7 +184,7 @@ void TText::InsDownSection(std::string s)
 	else
 	{
 		PTTextLink t = new TTextLink;
-		strcpy_s(t->Str, TextLineLength, s.c_str());
+		strncpy(t->Str, s.c_str(), TextLineLength);
 		t->pDown = pCurrent->GetDown();
 		pCurrent->pDown = t;
 		GoDownLink();
@@ -199,7 +199,7 @@ void TText::InsNextLine(std::string s)
 	else
 	{
 		PTTextLink t = new TTextLink;
-		strcpy_s(t->Str, TextLineLength, s.c_str());
+		strncpy(t->Str, s.c_str(), TextLineLength);
 		t->pNext = pCurrent->GetNext();
 		pCurrent->pNext = t;
 		GoNextLink();
@@ -214,7 +214,7 @@ void TText::InsNextSection(std::string s)
 	else
 	{
 		PTTextLink t = new TTextLink;
-		strcpy_s(t->Str, TextLineLength, s.c_str());
+		strncpy(t->Str,s.c_str(), TextLineLength);
 		t->pDown = pCurrent->GetNext();
 		pCurrent->pNext = t;
 		GoNextLink();
