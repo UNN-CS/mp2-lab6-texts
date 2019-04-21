@@ -67,7 +67,7 @@ void TTextLink::MemCleaner(TText &txt)
 TTextLink::TTextLink(TStr s, PTTextLink pn, PTTextLink pd) : pNext(pn), pDown(pd)
 {
 	if (s != NULL)
-		strcpy_s(Str, TextLineLength, s);
+		strncpy(Str, s, TextLineLength);
 	else
 		Str[0] = '\0';
 }
