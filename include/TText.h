@@ -1,6 +1,6 @@
 #include <stack>
 #include <fstream>
-#include "TDataCom.h"
+#include "tdatacom.h"
 #include "TTextLink.h"
 
 typedef TText* PTText;
