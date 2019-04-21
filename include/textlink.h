@@ -1,7 +1,7 @@
 #ifndef __TEXTLINK_H
 #define __TEXTLINK_H
 
-#include <string.h>
+#include <string>
 #include "tdatvalue.h"
 #include <iostream>
 #include <string>
@@ -25,7 +25,7 @@ class TTextLink : public TDatValue
 protected:
 	TStr Str;
 	PTTextLink pNext, pDown;
-	static  TTextMem MemHeader;
+	static  PTTextMem MemHeader;
 
 public:
 	static void InitMemSystem(int size = MemSize);
