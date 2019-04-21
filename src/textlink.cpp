@@ -1,7 +1,7 @@
 #include "textlink.h"
 #include "ttext.h"
 #include <iostream>
-#include <string.h>
+#include <cstring>
 
 PTTextMem TTextLink::MemHeader = new TTextMem();
 void TTextLink::InitMemSystem(int size) // инициализация памяти
@@ -47,13 +47,13 @@ void TTextLink::MemCleaner(TText &txt)
 	PTTextLink pLink = MemHeader->pFree;
 	while (pLink != nullptr)
 	{
-		std::strcpy(pLink->Str, "&&&");
+		strcpy(pLink->Str, "&&&");
 		pLink = pLink->pNext;
 	}
 	pLink = MemHeader->pFirst;
 	for (; pLink <= MemHeader->pLast; pLink++)
-		if (std::strstr(pLink->Str, "&&&") != nullptr)
-			std::strcpy(pLink->Str, pLink->Str + 3);
+		if (strstr(pLink->Str, "&&&") != nullptr)
+			strcpy(pLink->Str, pLink->Str + 3);
 		else
 			delete pLink;
 }

@@ -2,7 +2,7 @@
 #include "ttext.h"
 #include <iostream>
 #include <fstream>
-#include <string.h>
+#include <cstring>
 
 
 static char StrBuf[BufLength + 1];
@@ -73,7 +73,7 @@ void TText::SetLine(std::string s)
 	if (pCurrent == nullptr)
 		throw "text error";
 	else
-		std::strncpy(pCurrent->Str, s.c_str(), TextLineLength);
+		strncpy(pCurrent->Str, s.c_str(), TextLineLength);
 	pCurrent->Str[TextLineLength - 1] = '\0';
 }
 
@@ -86,7 +86,7 @@ void TText::InsDownLine(std::string s)
 	{
 		PTTextLink pd = pCurrent->pDown;
 		PTTextLink pl = new TTextLink("", pd, nullptr);
-		std::strncpy(pl->Str, s.c_str(), TextLineLength);
+		strncpy(pl->Str, s.c_str(), TextLineLength);
 		pl->Str[TextLineLength - 1] = '\0';
 		pCurrent->pDown = pl;
 	}
@@ -100,7 +100,7 @@ void TText::InsDownSection(std::string s)
 	{
 		PTTextLink pd = pCurrent->pDown;
 		PTTextLink pl = new TTextLink("", nullptr, pd);
-		std::strncpy(pl->Str, s.c_str(), TextLineLength);
+		strncpy(pl->Str, s.c_str(), TextLineLength);
 		pl->Str[TextLineLength - 1] = '\0';
 		pCurrent->pDown = pl;
 	}
@@ -113,7 +113,7 @@ void TText::InsNextLine(std::string s)
 	else {
 		PTTextLink pd = pCurrent->pNext;
 		PTTextLink pl = new TTextLink("", pd, nullptr);
-		std::strncpy(pl->Str, s.c_str(), TextLineLength);
+		strncpy(pl->Str, s.c_str(), TextLineLength);
 		pl->Str[TextLineLength - 1] = '\0';
 		pCurrent->pNext = pl;
 	}
@@ -126,7 +126,7 @@ void TText::InsNextSection(std::string s)
 	else {
 		PTTextLink pd = pCurrent->pNext;
 		PTTextLink pl = new TTextLink("", nullptr, pd);
-		std::strncpy(pl->Str, s.c_str(), TextLineLength);
+		strncpy(pl->Str, s.c_str(), TextLineLength);
 		pl->Str[TextLineLength - 1] = '\0';
 		pCurrent->pNext = pl;
 	}
@@ -248,7 +248,7 @@ PTText TText::GetCopy()
 			else
 			{
 				pl1 = St.top(); St.pop();
-				if (std::strstr(pl1->Str, "Copy") == nullptr)
+				if (strstr(pl1->Str, "Copy") == nullptr)
 				{
 					pl2 = new TTextLink("Copy", pl1, cpl);
 					St.push(pl2);
@@ -258,7 +258,7 @@ PTText TText::GetCopy()
 				else 
 				{
 					pl2 = pl1->GetNext();
-					std::strcpy(pl1->Str, pl2->Str);
+					strcpy(pl1->Str, pl2->Str);
 					pl1->pNext = cpl;
 					cpl = pl1;
 				}
