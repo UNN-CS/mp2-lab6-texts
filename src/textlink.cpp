@@ -1,4 +1,3 @@
-#include <conio.h>
 #include "textlink.h"
 #include "ttext.h"
 #include <iostream>
