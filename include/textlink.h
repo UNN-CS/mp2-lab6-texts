@@ -4,14 +4,12 @@
 #include <string.h>
 #include "tdatvalue.h"
 #include <iostream>
-
-#define TextLineLength 20
-#define MemSize 20
+#include <string>
+#include "ttext.h"
 
 class TText;
 class TTextLink;
 typedef TTextLink * PTTextLink;
-typedef char TStr[TextLineLength];
 
 class TTextMem
 {

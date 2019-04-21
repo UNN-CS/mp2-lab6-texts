@@ -3,11 +3,10 @@
 
 #include <stack>
 #include <iostream>
+#include <fstream>
+#include <string>
 #include "tdatacom.h"
 #include "textlink.h"
-
-class TText;
-typedef TText * PTText;
 
 class TText :public TDataCom
 {
@@ -24,7 +23,7 @@ protected:
 
 public:
 	TText(PTTextLink pl = nullptr);
-	~TText();
+    ~TText() { pFirst = nullptr; }
 	PTText GetCopy();
 
 	// навигация
