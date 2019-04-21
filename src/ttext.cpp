@@ -2,6 +2,7 @@
 #include "ttext.h"
 #include <iostream>
 #include <fstream>
+#include <string.h>
 
 
 static char StrBuf[BufLength + 1];

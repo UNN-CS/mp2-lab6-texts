@@ -1,6 +1,7 @@
 #include "textlink.h"
 #include "ttext.h"
 #include <iostream>
+#include <string.h>
 
 PTTextMem TTextLink::MemHeader = new TTextMem();
 void TTextLink::InitMemSystem(int size) // инициализация памяти
