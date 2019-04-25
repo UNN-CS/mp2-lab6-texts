@@ -8,7 +8,7 @@ TTextLink::TTextLink(TStr s, PTTextLink pn, PTTextLink pd)
 	pNext = pn;
 	pDown = pd;
 	if (s != nullptr)
-		strcpy_s(Str, s);
+		strcpy(Str, s);
 	else
 		Str[0] = '\0';
 
@@ -58,7 +58,7 @@ void TTextLink::MemCleaner(TText txt)
 	for (; pLink <= MemHeader.pLast; pLink++)
 	{
 		if (strstr(pLink->Str, "&&&") != nullptr)
-			strcpy_s(pLink->Str, pLink->Str + 3);
+			strcpy(pLink->Str, pLink->Str + 3);
 		else
 			delete pLink;
 	}

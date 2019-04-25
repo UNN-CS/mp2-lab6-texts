@@ -74,7 +74,7 @@ void TText::SetLine(string s)
 		SetRetCode(TooLongString);
 	else
 	{
-		strncpy_s(pCurrent->Str, s.c_str(), TextLineLength);
+		strncpy(pCurrent->Str, s.c_str(), TextLineLength);
 		pCurrent->Str[TextLineLength - 1] = '\0';
 	}
 }
@@ -88,7 +88,7 @@ void TText::InsDownLine(string s)
 	{
 		PTTextLink pd = pCurrent->pDown;
 		PTTextLink pl = new TTextLink("", pd, nullptr);
-		strncpy_s(pl->Str, s.c_str(), TextLineLength);
+		strncpy(pl->Str, s.c_str(), TextLineLength);
 		pl->Str[TextLineLength - 1] = '\0';
 		pCurrent->pDown = pl;
 		SetRetCode(TextOk);
@@ -104,7 +104,7 @@ void TText::InsDownSection(string s)
 	{
 		PTTextLink pd = pCurrent->pDown;
 		PTTextLink pl = new TTextLink("", nullptr, pd);
-		strncpy_s(pl->Str, s.c_str(), TextLineLength);
+		strncpy(pl->Str, s.c_str(), TextLineLength);
 		pl->Str[TextLineLength - 1] = '\0';
 		pCurrent->pDown = pl;
 		SetRetCode(TextOk);
@@ -120,7 +120,7 @@ void TText::InsNextLine(string s)
 	{
 		PTTextLink pn = pCurrent->pNext;
 		PTTextLink pl = new TTextLink("", pn, nullptr);
-		strncpy_s(pl->Str, s.c_str(), TextLineLength);
+		strncpy(pl->Str, s.c_str(), TextLineLength);
 		pl->Str[TextLineLength - 1] = '\0';
 		pCurrent->pNext = pl;
 		SetRetCode(TextOk);
@@ -136,7 +136,7 @@ void TText::InsNextSection(string s)
 	{
 		PTTextLink pn = pCurrent->pNext;
 		PTTextLink pl = new TTextLink("", nullptr, pn);
-		strncpy_s(pl->Str, s.c_str(), TextLineLength);
+		strncpy(pl->Str, s.c_str(), TextLineLength);
 		pl->Str[TextLineLength - 1] = '\0';
 		pCurrent->pNext = pl;
 		SetRetCode(TextOk);
@@ -264,7 +264,7 @@ PTText TText::GetCopy()
 				}
 				else
 				{
-					strncpy_s(pl1->Str, pl1->pNext->Str, TextLineLength);
+					strncpy(pl1->Str, pl1->pNext->Str, TextLineLength);
 					pl1->pNext = cpl;
 					cpl = pl1;
 				}
