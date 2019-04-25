@@ -1,4 +1,4 @@
-#include <gtest\gtest.h>
+#include <gtest.h>
 #include "TText.h"
 
 TEST(TTextLink, can_init_mem_default)
