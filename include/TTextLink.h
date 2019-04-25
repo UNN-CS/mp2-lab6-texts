@@ -20,30 +20,30 @@ typedef char TStr[TextLineLength];
 class TTextMem
 {
 protected:
-	PTTextLink pFirst;     // указатель на первое звено
-	PTTextLink pLast;      // указатель на последнее звено
-	PTTextLink pFree;      // указатель на первое свободное звено
+	PTTextLink pFirst;     // СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РїРµСЂРІРѕРµ Р·РІРµРЅРѕ
+	PTTextLink pLast;      // СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РїРѕСЃР»РµРґРЅРµРµ Р·РІРµРЅРѕ
+	PTTextLink pFree;      // СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РїРµСЂРІРѕРµ СЃРІРѕР±РѕРґРЅРѕРµ Р·РІРµРЅРѕ
 	friend class TTextLink;
 };
 
 class TTextLink : public TDatValue
 {
 protected:
-	TStr Str;                  // поле для хранения строки текста
-	PTTextLink pNext, pDown;   // указатели по тек. уровень и на подуровень
-	static TTextMem MemHeader; // система управления памятью
+	TStr Str;                  // РїРѕР»Рµ РґР»СЏ С…СЂР°РЅРµРЅРёСЏ СЃС‚СЂРѕРєРё С‚РµРєСЃС‚Р°
+	PTTextLink pNext, pDown;   // СѓРєР°Р·Р°С‚РµР»Рё РїРѕ С‚РµРє. СѓСЂРѕРІРµРЅСЊ Рё РЅР° РїРѕРґСѓСЂРѕРІРµРЅСЊ
+	static TTextMem MemHeader; // СЃРёСЃС‚РµРјР° СѓРїСЂР°РІР»РµРЅРёСЏ РїР°РјСЏС‚СЊСЋ
 	virtual void Print(ostream &os) { os << Str; }
 	friend class TText;
 public:
 	TTextLink(TStr s = nullptr, PTTextLink pn = nullptr, PTTextLink pd = nullptr);
 
 	~TTextLink() {}
-	static void InitMemSystem(int size = MemSize); // инициализация памяти
-	static void PrintFreeLink(void);               // печать свободных звеньев
-	void * operator new (size_t size);             // выделение звена
-	void operator delete (void *pM);               // освобождение звена
-	void MemCleaner(TText txt);                    // сборка мусора
-	int IsAtom() { return pDown == nullptr; }      // проверка атомарности звена
+	static void InitMemSystem(int size = MemSize); // РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РїР°РјСЏС‚Рё
+	static void PrintFreeLink(void);               // РїРµС‡Р°С‚СЊ СЃРІРѕР±РѕРґРЅС‹С… Р·РІРµРЅСЊРµРІ
+	void * operator new (size_t size);             // РІС‹РґРµР»РµРЅРёРµ Р·РІРµРЅР°
+	void operator delete (void *pM);               // РѕСЃРІРѕР±РѕР¶РґРµРЅРёРµ Р·РІРµРЅР°
+	void MemCleaner(TText txt);                    // СЃР±РѕСЂРєР° РјСѓСЃРѕСЂР°
+	int IsAtom() { return pDown == nullptr; }      // РїСЂРѕРІРµСЂРєР° Р°С‚РѕРјР°СЂРЅРѕСЃС‚Рё Р·РІРµРЅР°
 	PTTextLink GetNext() { return pNext; }
 	PTTextLink GetDown() { return pDown; }
 	PTDatValue GetCopy() { return new TTextLink(Str, pNext, pDown); }
