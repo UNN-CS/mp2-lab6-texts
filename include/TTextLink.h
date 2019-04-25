@@ -8,6 +8,7 @@
 #define TextLineLength 20
 #define MemSize 20
 
+class TText;
 class TTextMem;
 typedef TTextMem *PTTextMem;
 class TTextLink;
