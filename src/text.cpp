@@ -209,3 +209,110 @@ int TText::GoNext() {
     }
     return IsTextEnded();
 }
+
+PTTextLink TText::GetFirstAtom(PTTextLink pl) {
+    PTTextLink tmp = pl;
+
+    while(!tmp->IsAtom()) {
+        St.push(tmp);
+        tmp = tmp->GetDown();
+    }
+
+    return tmp;
+}
+
+PTText TText::GetCopy() {
+    PTTextLink pl1, pl2, pl = pFirst, cpl = nullptr;
+
+    if(pFirst != nullptr) {
+        while(!St.empty())
+            St.pop();
+        while(true) {
+            if(pl != nullptr) { // переход к первому атому
+                pl = GetFirstAtom(pl);
+                St.push(pl);
+
+                pl = pl->GetDown();
+            }
+            else if(St.empty())
+                break;
+            else {
+                pl1 = St.top();
+                St.pop();
+
+                if(strstr(pl1->Str, "Copy") == nullptr) {
+                    pl2 = new TTextLink("Copy", pl1, cpl);
+                    St.push(pl2);
+                    pl = pl1->pNext;
+                    cpl = nullptr;
+                }
+                else {
+                    pl2 = pl1->GetNext();
+                    strcpy(pl1->Str, pl2->Str);
+                    pl1->pNext = cpl;
+                    cpl = pl1;
+                }
+            }
+        }
+    }
+    return new TText(cpl);
+}
+
+void TText::Print() {
+    TextLevel = 0;
+    PrintText(pFirst);
+}
+
+void TText::PrintText(PTTextLink ptl) {
+    if(ptl != nullptr) {
+        for(int i = 0; i < TextLevel; i++)
+            std::cout<<" ";
+        std::cout<<" ";
+
+        ptl->Print(std::cout);
+        std::cout<<std::endl;
+
+        TextLevel++;
+        PrintText(ptl->GetDown());
+
+        TextLevel--;
+        PrintText(ptl->GetNext());
+    }
+}
+
+void TText::Read(const char * pFileName) {
+    std::ifstream TxtFile(pFileName);
+    TextLevel = 0;
+
+    if(TxtFile != nullptr) pfirst = ReadText(TxtFile);
+}
+
+PTTextLink TText::ReadText(std::ifstream& TxtFile) {
+    PTTextLink pHead, ptl;
+    pHead = ptl = new TTextLink();
+
+    while(TxtFile.eof() == 0) {
+        TxtFile.getline(StrBuf, BufLength, '\n');
+        if(StrBuf[0] == '}') {
+            TextLevel--;
+            break;
+        }
+        else if(StrBuf[0] == '{') {
+            TextLevel++;
+            ptl->pDown = ReadText(TxtFile)
+        }
+        else {
+            ptl->pNext = new TTextLink(StrBuf, nullptr, nullptr);
+            ptl = ptl->pNext;
+        }
+    }
+
+    ptl = pHead;
+
+    if(pHead -> pDown == nullptr) {
+        pHead = pHead->pNext;
+        delete ptl;
+    }
+
+    return pHead;
+}
