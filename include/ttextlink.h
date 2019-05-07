@@ -1,6 +1,7 @@
 #ifndef __TEXTLINK_H
 #define __TEXTLINK_H
 
+#include <string.h>
 #include "datvalue.h"
 
 #define TextLineLength 20
@@ -34,7 +35,7 @@ public:
 	static void MemCleaner(TText &txt); // сборка мусора
 	TTextLink(TStr s = NULL, PTTextLink pn = NULL, PTTextLink pd = NULL) {
 		pNext = pn; pDown = pd;
-		if (s != NULL) strcpy_s(Str, s); else Str[0] = '\0';
+		if (s != NULL) strcpy(Str, s); else Str[0] = '\0';
 	}
 	~TTextLink() {}
 	int IsAtom() { return pDown == NULL; } // проверка атомарности звена

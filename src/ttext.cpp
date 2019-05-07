@@ -94,7 +94,7 @@ void TText::SetLine(string s)
         SetRetCode(TextError);
     else
     {
-        strncpy_s(pCurrent->Str, s.c_str(), TextLineLength);
+        strncpy(pCurrent->Str, s.c_str(), TextLineLength);
         pCurrent->Str[TextLineLength - 1] = '\0';
     }
 }
@@ -106,7 +106,7 @@ void TText::InsDownLine(string s)
     else
     {
             PTTextLink tmp = new TTextLink (nullptr, pCurrent->pDown);
-            strncpy_s(tmp->Str, s.c_str(), TextLineLength);
+            strncpy(tmp->Str, s.c_str(), TextLineLength);
             tmp->Str[TextLineLength - 1] = '\0';
             pCurrent->pDown = tmp;
     }
@@ -135,7 +135,7 @@ void TText::InsDownSection(string s)
     else
     {
         PTTextLink tmp = new TTextLink(nullptr, nullptr, pCurrent->pDown);
-        strncpy_s(tmp->Str, s.c_str(), TextLineLength);
+        strncpy(tmp->Str, s.c_str(), TextLineLength);
         tmp->Str[TextLineLength - 1] = '\0';
         pCurrent->pDown = tmp;
         SetRetCode(TextOK);
@@ -166,7 +166,7 @@ void TText::InsNextLine(string s)
     else
     {
         PTTextLink tmp = new TTextLink(nullptr, pCurrent->pNext);
-        strncpy_s(tmp->Str, s.c_str(), TextLineLength);
+        strncpy(tmp->Str, s.c_str(), TextLineLength);
         tmp->Str[TextLineLength - 1] = '\0';
         pCurrent->pNext = tmp;
     }
@@ -200,7 +200,7 @@ void TText::InsNextSection(string s)
     else
     {
         PTTextLink tmp = new TTextLink(nullptr, nullptr, pCurrent->pNext);
-        strncpy_s(tmp->Str, s.c_str(), TextLineLength);
+        strncpy(tmp->Str, s.c_str(), TextLineLength);
         tmp->Str[TextLineLength - 1] = '\0';
         pCurrent->pNext = tmp;
     }

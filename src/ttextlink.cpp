@@ -65,7 +65,7 @@ void TTextLink::MemCleaner(TText &txt)
 	PTTextLink pLink = MemHeader.pFree;
 	while (pLink != nullptr)
 	{
-		strcpy_s(pLink->Str, "&&&");
+		strcpy(pLink->Str, "&&&");
 		pLink = pLink->pNext;
 	}
 
@@ -73,7 +73,7 @@ void TTextLink::MemCleaner(TText &txt)
 	while (pLink <= MemHeader.pLast)
 	{
 		if (strstr(pLink->Str, "&&&") != nullptr)
-			strcpy_s(pLink->Str, pLink->Str + 3);
+			strcpy(pLink->Str, pLink->Str + 3);
 		else
 			delete pLink;
 	}
