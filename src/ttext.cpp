@@ -314,7 +314,7 @@ PTText TText::GetCopy()
                     else
                     {
                         pl2 = pl1->pNext;
-                        strcpy_s(pl1->Str, pl2->Str);
+                        strcpy(pl1->Str, pl2->Str);
                         pl1->pNext = cpl;
                         cpl = pl1;
                     }
