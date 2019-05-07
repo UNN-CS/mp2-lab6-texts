@@ -1,6 +1,6 @@
 #include "ttext.h"
 #include "ttextlink.h"
-#include <gtest/gtest.h>
+#include <gtest.h>
 
 TEST(TText, can_ins_down_line)
 {
