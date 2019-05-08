@@ -5,15 +5,15 @@
 //
 
 #include <iostream>
-#include "TText.h"
-#include "TTextViewer.h"
+#include "ttext.hpp"
+#include "ttextviewer.hpp"
 using namespace std;
 
 int main()
 {
   PTText pText;
   TTextLink::InitMemSystem(50);
-  pText = new TText(new TTextLink((char*)"Header"));
+  pText = new TText(new TTextLink((char *)"Header"));
   TTextViewer::StartInterface(pText);
   return 0;
 }
