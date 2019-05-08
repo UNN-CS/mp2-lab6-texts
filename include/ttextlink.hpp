@@ -1,24 +1,22 @@
 #pragma once
 
-#include <tdatavalue.hpp>
-
+#include <string.h>
 #include <iostream>
+#include "tdatvalue.hpp"
+#include "ttexterrs.hpp"
 
-#define TEXTLINELENGTH 20
-#define MEMSIZE 20
-
-class TText;
+#define TextLineLength 20
+#define MemSize 20
+using namespace std;
 class TTextLink;
-typedef char TStr[TEXTLINELENGTH];
+class TText;
 typedef TTextLink *PTTextLink;
-
+typedef char TStr[TextLineLength];
 class TTextMem
 {
-public:
   PTTextLink pFirst; // указатель на первое звено
   PTTextLink pLast;  // указатель на последнее звено
   PTTextLink pFree;  // указатель на первое свободное звено
-
   friend class TTextLink;
 };
 typedef TTextMem *PTTextMem;
@@ -30,14 +28,20 @@ protected:
   PTTextLink pNext, pDown;   // указатели по тек. уровень и на подуровень
   static TTextMem MemHeader; // система управления памятью
 public:
-  static void InitMemSystem(int size = MEMSIZE); // инициализация памяти
+  static void InitMemSystem(int size = MemSize); // инициализация памяти
   static void PrintFreeLink(void);               // печать свободных звеньев
-  static void MemCleaner(const TText &txt);      // сборка мусора
-
-  void *operator new(size_t size); // выделение звена
-  void operator delete(void *pM);  // освобождение звена
-
-  TTextLink(TStr s = NULL, PTTextLink pn = NULL, PTTextLink pd = NULL);
+  void *operator new(size_t size);               // выделение звена
+  void operator delete(void *pM);                // освобождение звена
+  static void MemCleaner(TText &txt);            // сборка мусора
+  TTextLink(TStr s = NULL, PTTextLink pn = NULL, PTTextLink pd = NULL)
+  {
+    pNext = pn;
+    pDown = pd;
+    if (s != NULL)
+      strcpy(Str, s);
+    else
+      Str[0] = '\0';
+  }
   ~TTextLink() {}
   int IsAtom() { return pDown == NULL; } // проверка атомарности звена
   PTTextLink GetNext() { return pNext; }

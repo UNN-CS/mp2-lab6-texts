@@ -11,11 +11,11 @@
 
 #include "tdatacom.hpp"
 
-#define DEFMEMSIZE 25 // размер памяти по умолчанию
+#define DefMemSize 25 // размер памяти по умолчанию
 
-#define DATAEMPTY -101 // СД пуста
-#define DATAFULL -102  // СД переполнена
-#define DATANOMEM -103 // нет памяти
+#define DataEmpty -101 // СД пуста
+#define DataFull -102  // СД переполнена
+#define DataNoMem -103 // нет памяти
 
 typedef int TElem; // тип элемента СД
 typedef TElem *PTElem;
@@ -38,8 +38,7 @@ protected:
   void SetMem(void *p, int Size); // задание памяти
 public:
   virtual ~TDataRoot();
-  TDataRoot(int Size = DEFMEMSIZE);
-
+  TDataRoot(int Size = DefMemSize);
   virtual bool IsEmpty(void) const;       // контроль пустоты СД
   virtual bool IsFull(void) const;        // контроль переполнения СД
   virtual void Put(const TData &Val) = 0; // добавить значение
