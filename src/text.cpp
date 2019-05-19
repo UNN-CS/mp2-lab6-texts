@@ -1,3 +1,4 @@
+
 #include "text.h"
 #include "textlink.h"
 #include <fstream>
@@ -48,7 +49,7 @@ void TText::GoNextLink() {
 
 void TText::GoPrevLink() {
     if(Path.empty())
-        throw TextNoPrev;
+        throw TextError;
     else {
     pCurrent = Path.top();
     Path.pop();
