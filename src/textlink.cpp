@@ -4,7 +4,7 @@
 TTextMem TTextLink::MemHeader;
 
 void TTextLink::InitMemSystem(int size) { // инициализация памяти
-    //char Line[100];
+    char Line[100];
     MemHeader.pFirst = (PTTextLink) new char[sizeof(TTextLink)*size];
     MemHeader.pFree = MemHeader.pFirst;
     MemHeader.pLast = MemHeader.pFirst + (size-1);
