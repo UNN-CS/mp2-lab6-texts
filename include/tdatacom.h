@@ -16,7 +16,6 @@ class TDataCom
 {
 protected:
   int RetCode; // Код завершения
-
   int SetRetCode(int ret) { return RetCode = ret; }
 public:
   TDataCom(): RetCode(DataOK) {}
