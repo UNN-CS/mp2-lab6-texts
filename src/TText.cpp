@@ -1,8 +1,7 @@
 #define BufLength 80
 
-#include <conio.h>
 #include <fstream>
-#include "ttext.h"
+#include "TText.h"
 
 static char StrBuf[BufLength+1]; // буфер для ввода строк
 static int  TextLevel;           // номер текущего уровня текста
