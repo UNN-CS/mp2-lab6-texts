@@ -1,11 +1,11 @@
-
+п»ї
 #include "text.h"
 #include "textlink.h"
 #include <fstream>
 #define BufLength 80
 
-static char StrBuf[BufLength+1]; // буфер для ввода строк
-static int TextLevel; // текущий уровень текста
+static char StrBuf[BufLength+1]; // Р±СѓС„РµСЂ РґР»СЏ РІРІРѕРґР° СЃС‚СЂРѕРє
+static int TextLevel; // С‚РµРєСѓС‰РёР№ СѓСЂРѕРІРµРЅСЊ С‚РµРєСЃС‚Р°
 
 TText::TText(PTTextLink pl) {
     if(pl == nullptr)
@@ -229,7 +229,7 @@ PTText TText::GetCopy() {
         while(!St.empty())
             St.pop();
         while(true) {
-            if(pl != nullptr) { // переход к первому атому
+            if(pl != nullptr) { // РїРµСЂРµС…РѕРґ Рє РїРµСЂРІРѕРјСѓ Р°С‚РѕРјСѓ
                 pl = GetFirstAtom(pl);
                 St.push(pl);
 

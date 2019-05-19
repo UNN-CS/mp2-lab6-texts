@@ -1,4 +1,4 @@
-#include "gtest.h"
+﻿#include "gtest.h"
 
 #include "textlink.h"
 #include "text.h"
