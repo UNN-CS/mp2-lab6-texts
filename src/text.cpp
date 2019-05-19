@@ -100,7 +100,7 @@ void TText::InsNextLine(std::string s) {
         throw TextError;
 
     PTTextLink pn = pCurrent->pNext;
-    PTTextLink pl = new TTextLink("", pl, nullptr);
+    PTTextLink pl = new TTextLink("", pn, nullptr);
 
     strncpy(pl->Str, s.c_str(), TextLineLength);
     pl->Str[TextLineLength-1] = '\0';
@@ -284,7 +284,10 @@ void TText::Read(const char * pFileName) {
     std::ifstream TxtFile(pFileName);
     TextLevel = 0;
 
-    if(TxtFile != nullptr) pfirst = ReadText(TxtFile);
+	if (!TxtFile.is_open())
+		throw TextError;
+
+	pFirst = ReadText(TxtFile);
 }
 
 PTTextLink TText::ReadText(std::ifstream& TxtFile) {
@@ -299,7 +302,7 @@ PTTextLink TText::ReadText(std::ifstream& TxtFile) {
         }
         else if(StrBuf[0] == '{') {
             TextLevel++;
-            ptl->pDown = ReadText(TxtFile)
+			ptl->pDown = ReadText(TxtFile);
         }
         else {
             ptl->pNext = new TTextLink(StrBuf, nullptr, nullptr);
