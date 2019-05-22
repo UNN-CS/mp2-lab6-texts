@@ -9,6 +9,6 @@ script:
   - cmake ../mp2-lab6-texts
   - make -j
   - cd ./bin/
-  - ./TextsTestKit --gtest_list_tests
+  - ./test_texts --gtest_list_tests
 notifications:
   email: false
