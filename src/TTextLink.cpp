@@ -41,21 +41,21 @@ void TTextLink::operator delete(void *pM)
 }
 void TTextLink::MemCleaner(TText &txt)
 {
-    string str , mark = "&&&";
+    string str;
     // маркировка строк текста - маркер : '&&&'
     for (txt.Reset(); !txt.IsTextEnded(); txt.GoNext())
     {
-        if (str.find(mark) != 0)
-            txt.SetLine(mark + txt.GoNext());
+        if (str.find("&&&") != 0)
+            txt.SetLine("&&&" + txt.GoNext());
         //маркировка свободных звеньев
         PTTextLink pLink = MemHeader.pFree;
         for (; pLink != NULL; pLink = pLink->pNext)
-            strcpy(pLink->Str, mark);
+            strcpy(pLink->Str, "&&&");
         //сборка мусора
         pLink = MemHeader.pFirst;
         for(;pLink <= MemHeader.pLast;pLink++)
         {
-            if(strstr(pLink->Str,mark) != NULL) // строка текста или свободное звено
+            if(strstr(pLink->Str,"&&&") != NULL) // строка текста или свободное звено
                 strcpy(pLink->Str,pLink->Str + 3); // снятие маркировки
             else
                 delete pLink; // неучтенное звено в список свободных

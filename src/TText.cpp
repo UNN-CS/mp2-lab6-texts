@@ -304,7 +304,7 @@ PTTextLink TText::ReadText(ifstream &TxtFile)
     }
     while (TxtFile.eof() == 0)
     {
-        GetLine();
+        getline(TxtFile, buf);
         if (buf.front() == '}')
         {
             TextLevel--;
