@@ -2,10 +2,12 @@
 #define __TEXTLINK_H
 
 #include <string>
-#include "tdatvalue.h"
 #include <iostream>
 #include <cstring>
-#include "ttext.h"
+#include "tdatvalue.h"
+
+#define TextLineLength 20
+#define MemSize        20
 
 class TText;
 class TTextLink;

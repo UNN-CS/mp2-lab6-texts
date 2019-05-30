@@ -1,10 +1,12 @@
 #ifndef __T_TEXT_H__
 #define __T_TEXT_H__
 
-#include "ttextlink.h"
+
 #include <stack>
-#include <iostream>
+#include <string>
 #include <cstring>
+#include <iostream>
+#include "ttextlink.h"
 
 class TText;
 typedef TText * PTText;
