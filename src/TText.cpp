@@ -1,4 +1,4 @@
-#include "ttext.h"
+#include "TText.h"
 #include <fstream>
 #include <iostream>
 #include <cstring>

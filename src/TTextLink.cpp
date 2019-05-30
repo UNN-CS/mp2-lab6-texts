@@ -1,5 +1,5 @@
-#include "ttextlink.h"
-#include "ttext.h"
+#include "TTextLink.h"
+#include "TText.h"
 #include <iostream>
 #include <cstring>
 
