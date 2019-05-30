@@ -1,6 +1,20 @@
+#pragma once
+#include "DatValue.h"
+#include <string>
+#include <stack>
+#include "texters.h"
+#include <iostream>
+// #include <alloc.h>
+
+
+#define TextLineLength 255
+#define MemSize 20
+
+class TText;
 class TTextLink;
 typedef TTextLink *PTTextLink;
 typedef char TStr[TextLineLength];
+
 class TTextMem {
   PTTextLink pFirst;     // указатель на первое звено
   PTTextLink pLast;      // указатель на последнее звено
@@ -19,10 +33,10 @@ public:
  static void PrintFreeLink (void);  // печать свободных звеньев
  void * operator new (size_t size); // выделение звена
  void operator delete (void *pM);   // освобождение звена
- static void MemCleaner (const TText &txt); // сборка мусора
- TTextLink (Tstr s = NULL, PTTextLink pn = NULL, PTTextLink pd = NULL){
+ static void MemCleaner (TText &txt); // сборка мусора
+ TTextLink (TStr s = NULL, PTTextLink pn = NULL, PTTextLink pd = NULL) {
   pNext = pn; pDown = pd;
-  if (s != NULL) strcpy(Str,s); else Str[0]=’\0’;
+  if (s != NULL) strcpy(Str,s); else Str[0]='\0';
  }
  ~TTextLink() {}
  int IsAtom () {return pDown == NULL;} // проверка атомарности звена
@@ -32,4 +46,5 @@ public:
 protected:
  virtual void Print (ostream &os) {os << Str;}
  friend class TText;
+ friend ostream& operator<<(ostream& out, TTextLink ptl);
 };

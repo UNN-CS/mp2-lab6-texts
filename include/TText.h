@@ -1,15 +1,24 @@
+#pragma once
+#include "tdatacom.h"
+#include <stack>
+#include <fstream>
+#include <TTextLink.h>
+
+class TText;
+typedef TText * PTText;
+
 class TText : public TDataCom {
 protected:
  PTTextLink pFirst;      // указатель корня дерева
  PTTextLink pCurrent;      // указатель текущей строки
- stack< PTTextLink > Path; // стек траектории движения по тексту
- stack< PTTextLink > St;   // стек для итератора
+ stack <PTTextLink> Path; // стек траектории движения по тексту
+ stack <PTTextLink> St;   // стек для итератора
  PTTextLink GetFirstAtom (PTTextLink pl); // поиск первого атома
  void PrintText (PTTextLink ptl);         // печать текста со звена ptl
  PTTextLink ReadText (ifstream &TxtFile); //чтение текста из файла
 public:
  TText (PTTextLink pl = NULL);
- ~TText () {pFirst =NULL;}
+ ~TText () {pFirst = NULL;}
  PTText getCopy();
 // навигация
  int GoFirstLink (void); // переход к первой строке

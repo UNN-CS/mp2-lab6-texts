@@ -10,4 +10,3 @@ class TDatValue {  //модуль, объ€вл€ющий абстрактный класс объектов-значений спи
     virtual TDatValue * GetCopy() =0; // создание копии
    ~TDatValue() {}
 };
-
