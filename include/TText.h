@@ -6,7 +6,7 @@
 #include <string>
 #include <cstring>
 #include <iostream>
-#include "ttextlink.h"
+#include "TTextLink.h"
 
 class TText;
 typedef TText * PTText;

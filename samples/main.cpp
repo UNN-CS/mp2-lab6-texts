@@ -1,28 +1,20 @@
 #include <iostream>
 
-#include "ttext.h"
-#include "ttextlink.h"
+#include "TText.h"
+#include "TTextLink.h"
 
 using namespace std;
 
 int main()
 {
 	TTextLink::InitMemSystem();
-	TText text;
-	text.SetLine("Section 1");
-	text.InsDownLine("Line 1.2");
-	text.InsDownLine("Line 1.1");
-	text.InsNextLine("Section 2");
-	text.GoNextLink();
-	text.InsDownLine("Line 2.1");
-	text.GoDownLink();
-	text.InsDownLine("Line 2.1.2");
-	text.InsDownLine("Line 2.1.3");
-	text.GoPrevLink();
-	text.InsNextLine("Section 3");
-	text.Print();
+	TText t;
+	t.SetLine("1");
+	t.InsDownLine("2");
+	t.InsNextLine("3");
+	t.Print();
 	cout << "--------------------"<< endl;
-	PTText text2 = text.GetCopy();
-	text2->Print();
+	PTText t2 = t.GetCopy();
+	t2->Print();
 	return 0;
 }

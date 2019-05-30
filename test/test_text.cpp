@@ -1,7 +1,7 @@
 #include "gtest.h"
 
-#include "ttextlink.h"
-#include "ttext.h"
+#include "TTextlink.h"
+#include "TText.h"
 
 TEST(TTextLink, can_init_mem)
 {

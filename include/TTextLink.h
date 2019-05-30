@@ -4,7 +4,7 @@
 #include <string>
 #include <iostream>
 #include <cstring>
-#include "tdatvalue.h"
+#include "TDatValue.h"
 
 #define TextLineLength 20
 #define MemSize        20
