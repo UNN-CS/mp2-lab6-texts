@@ -1,14 +1,20 @@
-// ННГУ, ВМК, Курс "Методы программирования-2", С++, ООП
-//
-// Copyright (c) Гергель В.П. 28.07.2000
-//   Переработано для Microsoft Visual Studio 2008 Сысоевым А.В. (21.04.2015)
-//
-
 #include <iostream>
+
+#include "TText.h"
+#include "TTextLink.h"
 
 using namespace std;
 
 int main()
 {
-  return 0;
+	TTextLink::InitMemSystem();
+	TText t;
+	t.SetLine("1");
+	t.InsDownLine("2");
+	t.InsNextLine("3");
+	t.Print();
+	cout << "--------------------"<< endl;
+	PTText t2 = t.GetCopy();
+	t2->Print();
+	return 0;
 }
