@@ -4,7 +4,6 @@
 //   Переработано для Microsoft Visual Studio 2008 Сысоевым А.В. (21.04.2015)
 //
 // Обработка кодов завершения
-
 #ifndef __DATACOM_H__
 #define __DATACOM_H__
 
@@ -20,7 +19,7 @@ protected:
   int SetRetCode(int ret) { return RetCode = ret; }
 public:
   TDataCom(): RetCode(DataOK) {}
-  virtual ~TDataCom() = 0 {}
+  virtual ~TDataCom() {}
   int GetRetCode()
   {
     int temp = RetCode;
