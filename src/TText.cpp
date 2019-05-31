@@ -1,5 +1,5 @@
 #define BufLength 80
-#include <conio.h>
+// #include <conio.h>
 #include "TText.h"
 #include "texters.h"
 #include <iostream>
