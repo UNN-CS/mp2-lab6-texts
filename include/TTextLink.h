@@ -1,6 +1,7 @@
 #pragma once
 #include "DatValue.h"
 #include <string>
+#include <cstring>
 #include <stack>
 #include "texters.h"
 #include <iostream>
