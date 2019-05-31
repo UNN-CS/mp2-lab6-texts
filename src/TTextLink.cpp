@@ -3,6 +3,8 @@
 #include <conio.h>
 #include <iostream>
 
+TTextMem TTextLink::MemHeader;
+
 void TTextLink::InitMemSystem(int size) { // инициализация памяти
     char Line[100];
     MemHeader.pFirst = (PTTextLink) new char[sizeof(TTextLink)*size];

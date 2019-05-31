@@ -43,7 +43,7 @@ public:
  int GoNext (void);             // переход к следующей записи
 //работа с файлами
  void Read (char * pFileName);  // ввод текста из файла
- void Write (char * pFileName); // вывод текста в файл
+ //void Write (char * pFileName); // вывод текста в файл
 //печать
  void Print (void);             // печать текста
 };
