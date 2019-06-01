@@ -8,7 +8,10 @@
 #define TextLineLength 20
 #define MemSize        20
 
-using namespace std;
+#define TextError 101
+#define TextNoPrev 102
+//#define TextError 101
+//using namespace std;
 
 class TText;
 class TTextLink;
@@ -33,7 +36,7 @@ public:
 	static void PrintFreeLink(void);  // печать свободных звеньев
 	void * operator new (size_t size); // выделение звена
 	void operator delete (void *pM);   // освобождение звена
-	static void MemCleaner(const TText &txt); // сборка мусора
+	static void MemCleaner(TText &txt); // сборка мусора
 	TTextLink(TStr s = NULL, PTTextLink pn = NULL, PTTextLink pd = NULL) {
 		pNext = pn; pDown = pd;
 		if (s != NULL) strcpy(Str, s); else Str[0] = '\0';
@@ -44,8 +47,9 @@ public:
 	PTTextLink GetDown() { return pDown; }
 	PTDatValue GetCopy() { return new TTextLink(Str, pNext, pDown); }
 protected:
-	virtual void Print(ostream &os) { os << Str; }
+	virtual void Print(std::ostream &os) { os << Str; }
 	friend class TText;
+	//friend ostream& operator <<(ostream& os, TTextLink tl);
 };
 
 #endif //__TEXTLINK_H
