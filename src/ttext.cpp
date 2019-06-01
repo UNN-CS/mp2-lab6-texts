@@ -128,11 +128,10 @@ void TText::InsDownLine(std::string s)
         throw "text error";
     else
     {
-        PTTextLink pd = pCurrent->pDown;
-        PTTextLink pl = new TTextLink("", pd, nullptr);
-        std::strncpy(pl->Str, s.c_str(), TextLineLength);
-        pl->Str[TextLineLength - 1] = '\0';
-        pCurrent->pDown = pl;
+        PTTextLink tmp = new TTextLink (nullptr, pCurrent->pDown);
+            strncpy(tmp->Str, s.c_str(), TextLineLength);
+            tmp->Str[TextLineLength - 1] = '\0';
+            pCurrent->pDown = tmp;
     }
 }
 
