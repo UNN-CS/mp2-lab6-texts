@@ -130,7 +130,7 @@ void TText::InsDownLine(std::string s)
     {
         PTTextLink pd = pCurrent->pDown;
         PTTextLink pl = new TTextLink("", pd, nullptr);
-        strncpy(pl->Str, s.c_str(), TextLineLength);
+        std::strncpy(pl->Str, s.c_str(), TextLineLength);
         pl->Str[TextLineLength - 1] = '\0';
         pCurrent->pDown = pl;
     }
