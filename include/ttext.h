@@ -2,7 +2,9 @@
 #define __TEXT_H__
 
 #include <stack>
+#include <string>
 #include <fstream>
+#include <iostream>
 
 #include "tdatacom.h"
 #include "ttextlink.h"

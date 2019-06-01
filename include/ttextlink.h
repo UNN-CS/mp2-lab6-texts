@@ -15,7 +15,7 @@
 
 #include "tdatvalue.h"
 #include "ttext.h"
-#include <string>
+#include <cstring>
 #include <iostream>
 
 typedef char TStr[TextLineLength];
@@ -42,7 +42,7 @@ public:
     TTextLink(TStr s = nullptr, PTTextLink pn = nullptr, PTTextLink pd = nullptr) {
         pNext = pn; pDown = pd;
         if (s != nullptr)
-            std::strcpy(Str, s);
+            strcpy(Str, s);
         else
             Str[0] = '\0';
     }
