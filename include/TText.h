@@ -8,6 +8,9 @@
 #include "tdatacom.h"
 #include "TTextLink.h"
 
+class TText;
+typedef TText * PTText;
+
 class TText : public TDataCom {
 protected:
 	PTTextLink pFirst;      // указатель корня дерева

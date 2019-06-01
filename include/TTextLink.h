@@ -8,6 +8,8 @@
 #define TextLineLength 20
 #define MemSize        20
 
+using namespace std;
+
 class TText;
 class TTextLink;
 typedef TTextLink* PTTextLink;
@@ -32,9 +34,9 @@ public:
 	void * operator new (size_t size); // выделение звена
 	void operator delete (void *pM);   // освобождение звена
 	static void MemCleaner(const TText &txt); // сборка мусора
-	TTextLink(Tstr s = NULL, PTTextLink pn = NULL, PTTextLink pd = NULL) {
+	TTextLink(TStr s = NULL, PTTextLink pn = NULL, PTTextLink pd = NULL) {
 		pNext = pn; pDown = pd;
-		if (s != NULL) strcpy(Str, s); else Str[0] = Т\0Т;
+		if (s != NULL) strcpy(Str, s); else Str[0] = '\0';
 	}
 	~TTextLink() {}
 	int IsAtom() { return pDown == NULL; } // проверка атомарности звена
