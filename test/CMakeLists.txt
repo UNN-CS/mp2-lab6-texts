@@ -1,7 +1,9 @@
-set(target ${MP2_LIBRARY})
+set(target ${MP2_TESTS})
 
-file(GLOB hdrs "*.h*" "${MP2_INCLUDE}/*.h*")
+file(GLOB hdrs "*.h*")
 file(GLOB srcs "*.cpp")
 
-add_library(${target} STATIC ${srcs} ${hdrs})
-target_link_libraries(${target} ${LIBRARY_DEPS})
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty")
+
+add_executable(${target} ${srcs} ${hdrs})
+target_link_libraries(${target} gtest ${MP2_LIBRARY})

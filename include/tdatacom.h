@@ -20,7 +20,7 @@ protected:
   int SetRetCode(int ret) { return RetCode = ret; }
 public:
   TDataCom(): RetCode(DataOK) {}
-  virtual ~TDataCom() {}
+  virtual ~TDataCom() = 0 {}
   int GetRetCode()
   {
     int temp = RetCode;
