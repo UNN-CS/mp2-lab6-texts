@@ -141,11 +141,10 @@ void TText::InsDownSection(std::string s)
         throw "text error";
     else
     {
-        PTTextLink pd = pCurrent->pDown;
-        PTTextLink pl = new TTextLink("", nullptr, pd);
-        strncpy(pl->Str, s.c_str(), TextLineLength);
-        pl->Str[TextLineLength - 1] = '\0';
-        pCurrent->pDown = pl;
+        PTTextLink tmp = new TTextLink(nullptr, nullptr, pCurrent->pDown);
+        strncpy(tmp->Str, s.c_str(), TextLineLength);
+        tmp->Str[TextLineLength - 1] = '\0';
+        pCurrent->pDown = tmp;
     }
 }
 
@@ -154,11 +153,10 @@ void TText::InsNextLine(std::string s)
     if (pCurrent == nullptr)
         throw "text error";
     else {
-        PTTextLink pd = pCurrent->pNext;
-        PTTextLink pl = new TTextLink("", pd, nullptr);
-        strncpy(pl->Str, s.c_str(), TextLineLength);
-        pl->Str[TextLineLength - 1] = '\0';
-        pCurrent->pNext = pl;
+        PTTextLink tmp = new TTextLink(nullptr, pCurrent->pNext);
+        strncpy(tmp->Str, s.c_str(), TextLineLength);
+        tmp->Str[TextLineLength - 1] = '\0';
+        pCurrent->pNext = tmp;
     }
 }
 
@@ -167,11 +165,10 @@ void TText::InsNextSection(std::string s)
     if (pCurrent == nullptr)
         throw "text error";
     else {
-        PTTextLink pd = pCurrent->pNext;
-        PTTextLink pl = new TTextLink("", nullptr, pd);
-        strncpy(pl->Str, s.c_str(), TextLineLength);
-        pl->Str[TextLineLength - 1] = '\0';
-        pCurrent->pNext = pl;
+        TTextLink tmp = new TTextLink(nullptr, nullptr, pCurrent->pNext);
+        strncpy(tmp->Str, s.c_str(), TextLineLength);
+        tmp->Str[TextLineLength - 1] = '\0';
+        pCurrent->pNext = tmp;
     }
 }
 
