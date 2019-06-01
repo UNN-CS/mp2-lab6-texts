@@ -18,8 +18,6 @@
 #include <string>
 #include <iostream>
 
-class TTextLink;
-typedef TTextLink* PTTextLink;
 typedef char TStr[TextLineLength];
 
 class TTextMem {

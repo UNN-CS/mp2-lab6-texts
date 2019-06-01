@@ -1,5 +1,7 @@
 #include "ttextlink.h"
 
+TTextMem TTextLink::MemHeader;
+
 void TTextLink::InitMemSystem(int size) {
     MemHeader.pFirst = (PTTextLink) new char[sizeof(TTextLink) * size];
     MemHeader.pFree = MemHeader.pFirst;

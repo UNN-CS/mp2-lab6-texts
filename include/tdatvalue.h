@@ -8,5 +8,9 @@ public:
 };
 
 typedef TDatValue* PTDatValue;
+class TText;
+typedef TText* PTText;
+class TTextLink;
+typedef TTextLink* PTTextLink;
 
 #endif
