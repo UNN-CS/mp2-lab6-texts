@@ -1,183 +1,106 @@
 #include "ttext.h"
-#include <cstring>
 
 #define BufLength 80
 
 static char StrBuf[BufLength + 1];
 static int TextLevel;
 
-TText::TText(PTTextLink pl)
-{
+TText::TText(PTTextLink pl) {
     if (pl == nullptr)
         pl = new TTextLink();
-    pCurrent = pFirst = pl;
+    pFirst = pCurrent =pl;
 }
 
-PTText TText::GetCopy()
-{
-    PTTextLink pl, pl1, pl2, cpl;
-    pl = pFirst;
-    cpl = nullptr;
-    char s[5] = "Copy";
-
-    if (pFirst != nullptr)
-    {
-        while (!St.empty())
-            St.pop();
-
-        while (true)
-        {
-            if (pl != nullptr)
-            {
-                pl = GetFirstAtom(pl);
-                St.push(pl);
-                pl = pl->pDown;
-            }
-            else 
-                if (St.empty()) break;
-                else
-                {
-                    pl1 = St.top();
-                    St.pop();
-
-                    if (strstr(pl1->Str, "Copy") == nullptr)
-                    {
-                        pl2 = new TTextLink (s, pl1, cpl);
-                        St.push(pl2);
-                        pl = pl1->pNext;
-                        cpl = nullptr;
-                    }
-                    else
-                    {
-                        pl2 = pl1->pNext;
-                        strcpy(pl1->Str, pl2->Str);
-                        pl1->pNext = cpl;
-                        cpl = pl1;
-                    }
-                }
-        }
-    }
-    return new TText(cpl);
-}
-
-
-void TText::GoFirstLink()
-{
+void TText::GoFirstLink(void) {
     while (!Path.empty())
-        Path.pop(); 
+        Path.pop();
     pCurrent = pFirst;
     if (pCurrent == nullptr)
-        throw "Text error";
+        throw TextError;
 }
 
-void TText::GoDownLink()
-{
-    if ((pCurrent != nullptr) && (pCurrent->pDown != nullptr))
-    {
-        Path.push(pCurrent);
-        pCurrent = pCurrent->pDown;
-    }
-    else
-        throw "Text error";
+void TText::GoDownLink(void) {
+    if (pCurrent == nullptr)
+        throw TextError;
+    if (pCurrent->pDown == nullptr)
+        throw TextNoDown;
+    Path.push(pCurrent);
+    pCurrent = pCurrent->pDown;
 }
 
-void TText::GoNextLink()
-{
-    if ((pCurrent != nullptr) && (pCurrent->pNext != nullptr))
-    {
-        Path.push(pCurrent);
-        pCurrent = pCurrent->pNext;
-    }
-    else
-        throw "text error";
+void TText::GoNextLink(void) {
+    if (pCurrent == nullptr)
+        throw TextError;
+    if (pCurrent->pNext == nullptr)
+        throw TextNoNext;
+    Path.push(pCurrent);
+    pCurrent = pCurrent->pNext;
 }
 
-void TText::GoPrevLink()
-{
+void TText::GoPrevLink(void) {
     if (Path.empty())
-        throw "text no prev";
-    else
-    {
-        pCurrent = Path.top();
-        Path.pop();
-    }
+        throw TextNoPrev;
+    pCurrent = Path.top();
+    Path.pop();
 }
 
-
-std::string TText::GetLine()
-{
+std::string TText::GetLine(void) {
     if (pCurrent == nullptr)
         return std::string("");
     else
-        return pCurrent->Str;
+        return std::string(pCurrent->Str);
 }
-
-void TText::SetLine(std::string s)
-{
+void TText::SetLine(std::string s) {
     if (pCurrent == nullptr)
-        throw "text error";
-    else
-        strncpy(pCurrent->Str, s.c_str(), TextLineLength);
+        throw TextError;
+    strncpy(pCurrent->Str, s.c_str(), TextLineLength);
     pCurrent->Str[TextLineLength - 1] = '\0';
 }
 
-
-void TText::InsDownLine(std::string s)
-{
+void TText::InsDownLine(std::string s) {
     if (pCurrent == nullptr)
-        throw "text error";
-    else
-    {
-        PTTextLink tmp = new TTextLink (nullptr, pCurrent->pDown);
-            strncpy(tmp->Str, s.c_str(), TextLineLength);
-            tmp->Str[TextLineLength - 1] = '\0';
-            pCurrent->pDown = tmp;
-    }
+        throw TextError;
+    PTTextLink pd = pCurrent->pDown;
+    PTTextLink pl = new TTextLink("", pd, nullptr);
+    strncpy(pl->Str, s.c_str(), TextLineLength);
+    pl->Str[TextLineLength - 1] = '\0';
+    pCurrent->pDown = pl;
 }
 
-void TText::InsDownSection(std::string s)
-{
+void TText::InsDownSection(std::string s) {
     if (pCurrent == nullptr)
-        throw "text error";
-    else
-    {
-        PTTextLink tmp = new TTextLink(nullptr, nullptr, pCurrent->pDown);
-        strncpy(tmp->Str, s.c_str(), TextLineLength);
-        tmp->Str[TextLineLength - 1] = '\0';
-        pCurrent->pDown = tmp;
-    }
+        throw TextError;
+    PTTextLink pd = pCurrent->pDown;
+    PTTextLink pl = new TTextLink("", nullptr, pd);
+    strncpy(pl->Str, s.c_str(), TextLineLength);
+    pl->Str[TextLineLength - 1] = '\0';
+    pCurrent->pDown = pl;
 }
 
-void TText::InsNextLine(std::string s)
-{
+void TText::InsNextLine(std::string s) {
     if (pCurrent == nullptr)
-        throw "text error";
-    else {
-        PTTextLink tmp = new TTextLink(nullptr, pCurrent->pNext);
-        strncpy(tmp->Str, s.c_str(), TextLineLength);
-        tmp->Str[TextLineLength - 1] = '\0';
-        pCurrent->pNext = tmp;
-    }
+        throw TextError;
+    PTTextLink pn = pCurrent->pNext;
+    PTTextLink pl = new TTextLink("", pn, nullptr);
+    strncpy(pl->Str, s.c_str(), TextLineLength);
+    pl->Str[TextLineLength - 1] = '\0';
+    pCurrent->pNext = pl;
 }
 
-void TText::InsNextSection(std::string s)
-{
+void TText::InsNextSection(std::string s) {
     if (pCurrent == nullptr)
-        throw "text error";
-    else {
-        TTextLink tmp = new TTextLink(nullptr, nullptr, pCurrent->pNext);
-        strncpy(tmp->Str, s.c_str(), TextLineLength);
-        tmp->Str[TextLineLength - 1] = '\0';
-        pCurrent->pNext = tmp;
-    }
+        throw TextError;
+    PTTextLink pn = pCurrent->pNext;
+    PTTextLink pl = new TTextLink("", nullptr, pn);
+    strncpy(pl->Str, s.c_str(), TextLineLength);
+    pl->Str[TextLineLength - 1] = '\0';
+    pCurrent->pNext = pl;
 }
 
-void TText::DelDownLine()
-{
+void TText::DelDownLine(void) {
     if (pCurrent == nullptr)
-        throw "text error";
-    else if (pCurrent->pDown != nullptr)
-    {
+        throw TextError;
+    if (pCurrent->pDown != nullptr) {
         PTTextLink pl1 = pCurrent->pDown;
         PTTextLink pl2 = pl1->pNext;
         if (pl1->pDown == nullptr)
@@ -185,50 +108,42 @@ void TText::DelDownLine()
     }
 }
 
-void TText::DelDownSection()
-{
+void TText::DelDownSection(void) {
     if (pCurrent == nullptr)
-        throw "text error";
-    else if (pCurrent->pDown != nullptr)
-    {
+        throw TextError;
+    if (pCurrent->pDown != nullptr) {
         PTTextLink pl1 = pCurrent->pDown;
         PTTextLink pl2 = pl1->pNext;
         pCurrent->pDown = pl2;
     }
 }
 
-void TText::DelNextLine()
-{
+void TText::DelNextLine(void) {
     if (pCurrent == nullptr)
-        throw "text error";
-    else if (pCurrent->pNext != nullptr)
-    {
+        throw TextError;
+    if (pCurrent->pNext != nullptr) {
         PTTextLink pl1 = pCurrent->pNext;
         PTTextLink pl2 = pl1->pNext;
-        if (pl1->pNext == nullptr)
+        if (pl1->pDown == nullptr)
             pCurrent->pNext = pl2;
     }
 }
 
-void TText::DelNextSection()
-{
+void TText::DelNextSection(void) {
     if (pCurrent == nullptr)
-        throw "text error";
-    else if (pCurrent->pNext != nullptr) {
+        throw TextError;
+    if (pCurrent->pNext != nullptr) {
         PTTextLink pl1 = pCurrent->pNext;
         PTTextLink pl2 = pl1->pNext;
         pCurrent->pNext = pl2;
     }
 }
 
-
-int TText::Reset()
-{
+int TText::Reset(void) {
     while (!St.empty())
         St.pop();
     pCurrent = pFirst;
-    if (pCurrent != nullptr)
-    {
+    if (pCurrent != nullptr) {
         St.push(pCurrent);
         if (pCurrent->pNext != nullptr)
             St.push(pCurrent->pNext);
@@ -238,67 +153,91 @@ int TText::Reset()
     return IsTextEnded();
 }
 
-int TText::IsTextEnded()const
-{
+int TText::IsTextEnded(void) const {
     return !St.size();
 }
 
-int TText::GoNext()
-{
-    if (!IsTextEnded())
-    {
+int TText::GoNext(void) {
+    if (!IsTextEnded()) {
         pCurrent = St.top();
         St.pop();
-        if (pCurrent->pNext != nullptr)
-            St.push(pCurrent->pNext);
-        if (pCurrent->pDown != nullptr)
-            St.push(pCurrent->pDown);
+        if (pCurrent != pFirst) {
+            if (pCurrent->pNext != nullptr)
+                St.push(pCurrent->pNext);
+            if (pCurrent->pDown != nullptr)
+                St.push(pCurrent->pDown);
+        }
     }
     return IsTextEnded();
 }
 
-
-void TText::Read(const char *pFileName)
-{
-    std::ifstream TxtFile(pFileName);
-    TextLevel = 0;
-    if (!TxtFile.is_open())
-        throw - 1;
-    pFirst = ReadText(TxtFile);
-}
-
-void TText::Print()
-{
-    TextLevel = 0;
-    PrintText(pFirst);
-}
-
-
-PTTextLink TText::GetFirstAtom(PTTextLink pl)
-{
+PTTextLink TText::GetFirstAtom(PTTextLink pl) {
     PTTextLink tmp = pl;
-    while (!tmp->IsAtom())
-    {
+    while (!tmp->IsAtom()) {
         St.push(tmp);
         tmp = tmp->GetDown();
     }
     return tmp;
 }
 
-void TText::PrintText(PTTextLink ptl)
-{
-    if (ptl != nullptr)
-    {
-        for (int i = 0; i < TextLevel; i++)
-            std::cout << "  ";
+PTText TText::GetCopy() {
+    PTTextLink pl1, pl2, pl = pFirst, cpl = nullptr;
+    if (pFirst != nullptr) {
+        while (!St.empty()) St.pop();
+        while (1) {
+            if (pl != nullptr) {
+                pl = GetFirstAtom(pl);
+                St.push(pl);
+                pl = pl->GetDown();
+            }
+            else if (St.empty()) break;
+            else {
+                pl1 = St.top();
+                St.pop();
+                if (strstr(pl1->Str, "Copy") == nullptr) {
+                    pl2 = new TTextLink("Copy", pl1, cpl);
+                    St.push(pl2);
+                    pl = pl1->pNext;
+                    cpl = nullptr;
+                }
+                else {
+                    pl2 = pl1->GetNext();
+                    strcpy(pl1->Str, pl2->Str);
+                    pl1->pNext = cpl;
+                    cpl = pl1;
+                }
+            }
+        }
+    }
+    return new TText(cpl);
+}
+
+void TText::Print() {
+    TextLevel = 0;
+    PrintText(pFirst);
+}
+
+void TText::PrintText(PTTextLink ptl) {
+    if (ptl != nullptr) {
+        for (int i = 0; i < TextLevel; ++i)
+            std::cout << " ";
         std::cout << " " << ptl->Str << std::endl;
-        ++TextLevel; PrintText(ptl->GetDown());
-        --TextLevel; PrintText(ptl->GetNext());
+        TextLevel++;
+        PrintText(ptl->GetDown());
+        TextLevel--;
+        PrintText(ptl->GetNext());
     }
 }
 
-PTTextLink TText::ReadText(std::ifstream &TxtFile)
-{
+void TText::Read(char* pFileName) {
+    std::ifstream TxtFile(pFileName);
+    TextLevel = 0;
+    if (!TxtFile.is_open())
+        throw "Read error";
+    pFirst = ReadText(TxtFile);
+}
+
+PTTextLink TText::ReadText(std::ifstream & TxtFile) {
     PTTextLink pHead, ptl;
     pHead = ptl = new TTextLink();
     while (TxtFile.eof() == 0) {
@@ -308,6 +247,10 @@ PTTextLink TText::ReadText(std::ifstream &TxtFile)
             break;
         }
         else if (StrBuf[0] == '{') {
+            ++TextLevel;
+            ptl->pDown = ReadText(TxtFile);
+        }
+        else {
             ptl->pNext = new TTextLink(StrBuf, nullptr, nullptr);
             ptl = ptl->pNext;
         }
