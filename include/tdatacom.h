@@ -12,6 +12,15 @@
 #define DataErr -1
 
 // TDataCom является общим базовым классом
+#define TextOK 0                 //ошибок нет
+// коды ситуаций
+#define TextNoDown 101           // нет подуровня для текущей позиции
+#define TextNoNext 102           // нет следующего раздела текущего уровня
+#define TextNoPrev 103           // текущая позиция в начале текста
+// коды ошибок
+#define TextError -102 // ошибка в тексте
+#define TextNoMem -101 // нет памяти
+
 class TDataCom
 {
 protected:
