@@ -4,7 +4,7 @@
 #include "TText.h"
 #include "TTextLink.h"
 #include <fstream>
-#include <conio.h>
+//#include <conio.h>
 
 static char StrBuf[BufLength + 1]; //буфер для ввода строк
 static int TextLevel;              //номер текущего уровня текста
