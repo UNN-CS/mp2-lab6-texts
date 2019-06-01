@@ -1,5 +1,5 @@
 #include "ttext.h"
-#include <string>
+#include <cstring>
 
 #define BufLength 80
 
