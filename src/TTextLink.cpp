@@ -61,8 +61,4 @@ void TTextLink:: MemCleaner( TText &txt) {// сборка мусора
 	}
 }
 
-//ostream & operator<<(ostream & os, TTextLink tl)
-//{
-//	os << tl.Str;
-//	return os;
-//}
+

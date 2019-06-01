@@ -11,18 +11,18 @@ TEST(TTextLink, can_init_memory)
 TEST(TTextLink, can_create_ttextlink)
 {
     TTextLink::InitMemSystem();
-    ASSERT_NO_THROW(TTextLink t("wow"));
+    ASSERT_NO_THROW(TTextLink t("hello"));
 }
 
 
 TEST(TTextLink, can_get_copy)
 {
     TTextLink::InitMemSystem();
-    TTextLink t("Wooow");
+    TTextLink t("hello");
     ASSERT_NO_THROW(PTTextLink t2 = (PTTextLink)t.GetCopy());
 }
 
-TEST(TText, can_creat_ttext)
+TEST(TText, can_create_ttext)
 {
     TTextLink::InitMemSystem();
     ASSERT_NO_THROW(TText t);
@@ -32,7 +32,7 @@ TEST(TText, can_set_line)
 {
     TTextLink::InitMemSystem();
     TText t;
-    ASSERT_NO_THROW(t.SetLine("WoW"));
+    ASSERT_NO_THROW(t.SetLine("hello"));
 }
 
 
@@ -40,7 +40,7 @@ TEST(TText, can_get_line)
 {
     TTextLink::InitMemSystem();
     TText t;
-    t.SetLine("wow");
+    t.SetLine("hello");
     ASSERT_NO_THROW(t.GetLine());
 }
 

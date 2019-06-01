@@ -31,21 +31,5 @@ int main()
 
 	txt.Print();
 
-
-	/*cout << "Yo\n";
-	TTextLink::InitMemSystem();
-	TText txt;
-	cout << "WOW\n";
-	txt.SetLine("walrus");
-	cout << "Yo\n";
-	txt.InsDownLine("aba");
-	cout << "wOw\n";
-	txt.InsDownLine("caba");
-	txt.InsDownLine("lul");
-	txt.InsNextLine("lul2");
-	txt.InsNextLine("lul4");
-	txt.Print();
-	PTText txt2 = txt.GetCopy();
-	txt2->Print();*/
 	return 0;
 }

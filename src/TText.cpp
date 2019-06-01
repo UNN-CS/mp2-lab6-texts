@@ -376,26 +376,3 @@ PTTextLink TText::ReadText(std::ifstream &TxtFile)
 
 
 
-//
-//void TText::wr(ofstream &txt, PTTextLink ptl)
-//{
-//	if (ptl != nullptr)
-//	{
-//		for (int i = 0; i < TextLevel; i++)
-//			txt << " ";
-//		txt << *ptl << endl;
-//		TextLevel++;
-//		wr(txt, ptl->GetDown());
-//		TextLevel--;
-//		wr(txt, ptl->GetNext());
-//	}
-//}
-//
-//void TText::Write(char *pFileName)
-//{
-//	ofstream TxtFile;
-//	TxtFile.open(pFileName);
-//	TextLevel = 0;
-//	wr(TxtFile, pFirst);
-//}
-
