@@ -1,6 +1,6 @@
 #include "TText.h"
 #include "TText.cpp"
-#include <gtest.h>
+#include <gtest/gtest.h>
 
 TEST(TText, can_create_text)
 {
