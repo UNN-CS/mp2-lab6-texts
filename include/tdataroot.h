@@ -1,6 +1,6 @@
 #pragma once
 
-#include "TDataCom.h"
+#include "tdatacom.h"
 
 #define DefMemSize   25  // размер памяти по умолчанию
 
