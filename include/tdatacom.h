@@ -1,32 +1,31 @@
-// ННГУ, ВМК, Курс "Методы программирования-2", С++, ООП
-//
-// tdatacom.h - Copyright (c) Гергель В.П. 30.08.2000
-//   Переработано для Microsoft Visual Studio 2008 Сысоевым А.В. (21.04.2015)
-//
-// Обработка кодов завершения
-
-#ifndef __DATACOM_H__
-#define __DATACOM_H__
+﻿#pragma once
 
 #define DataOK   0
 #define DataErr -1
 
 // TDataCom является общим базовым классом
+#define TextOK 0
+#define TextNoDown 101
+#define TextNoNext 102
+#define TextNoPrev 103
+#define TextError -102
+#define TextNoMem -101
+
+
 class TDataCom
 {
 protected:
-  int RetCode; // Код завершения
-
-  int SetRetCode(int ret) { return RetCode = ret; }
+	int RetCode; 
+	int SetRetCode(int ret) { return RetCode = ret; };
 public:
-  TDataCom(): RetCode(DataOK) {}
-  virtual ~TDataCom() = 0 {}
-  int GetRetCode()
-  {
-    int temp = RetCode;
-    RetCode = DataOK;
-    return temp;
-  }
+	TDataCom() : RetCode(DataOK) {}
+	virtual ~TDataCom() {}
+	int GetRetCode()
+	{
+		int temp = RetCode;
+		RetCode = DataOK;
+		return temp;
+	}
 };
 
-#endif
+

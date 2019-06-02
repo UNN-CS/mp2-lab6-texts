@@ -1,53 +1,42 @@
-// РќРќР“РЈ, Р’РњРљ, РљСѓСЂСЃ "РњРµС‚РѕРґС‹ РїСЂРѕРіСЂР°РјРјРёСЂРѕРІР°РЅРёСЏ-2", РЎ++, РћРћРџ
-//
-// tdataroot.h - Copyright (c) Р“РµСЂРіРµР»СЊ Р’.Рџ. 28.07.2000 (06.08)
-//   РџРµСЂРµСЂР°Р±РѕС‚Р°РЅРѕ РґР»СЏ Microsoft Visual Studio 2008 РЎС‹СЃРѕРµРІС‹Рј Рђ.Р’. (21.04.2015)
-//
-// Р”РёРЅР°РјРёС‡РµСЃРєРёРµ СЃС‚СЂСѓРєС‚СѓСЂС‹ РґР°РЅРЅС‹С… - Р±Р°Р·РѕРІС‹Р№ (Р°Р±СЃС‚СЂР°РєС‚РЅС‹Р№) РєР»Р°СЃСЃ - РІРµСЂСЃРёСЏ 3.2
-//   РїР°РјСЏС‚СЊ РІС‹РґРµР»СЏРµС‚СЃСЏ РґРёРЅР°РјРёС‡РµСЃРєРё РёР»Рё Р·Р°РґР°РµС‚СЃСЏ РјРµС‚РѕРґРѕРј SetMem
+#pragma once
 
-#ifndef __DATAROOT_H__
-#define __DATAROOT_H__
+#include "TDataCom.h"
 
-#include "tdatacom.h"
+#define DefMemSize   25  // размер памяти по умолчанию
 
-#define DefMemSize   25  // СЂР°Р·РјРµСЂ РїР°РјСЏС‚Рё РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
+#define DataEmpty  -101  // СД пуста
+#define DataFull   -102  // СД переполнена
+#define DataNoMem  -103  // нет памяти
 
-#define DataEmpty  -101  // РЎР” РїСѓСЃС‚Р°
-#define DataFull   -102  // РЎР” РїРµСЂРµРїРѕР»РЅРµРЅР°
-#define DataNoMem  -103  // РЅРµС‚ РїР°РјСЏС‚Рё
-
-typedef int    TElem;    // С‚РёРї СЌР»РµРјРµРЅС‚Р° РЎР”
+typedef int    TElem;    // тип элемента СД
 typedef TElem* PTElem;
-typedef int    TData;    // С‚РёРї Р·РЅР°С‡РµРЅРёР№ РІ РЎР”
+typedef int    TData;    // тип значений в СД
 
 enum TMemType { MEM_HOLDER, MEM_RENTER };
 
-class TDataRoot: public TDataCom
+class TDataRoot : public TDataCom
 {
 protected:
-  PTElem pMem;      // РїР°РјСЏС‚СЊ РґР»СЏ РЎР”
-  int MemSize;      // СЂР°Р·РјРµСЂ РїР°РјСЏС‚Рё РґР»СЏ РЎР”
-  int DataCount;    // РєРѕР»РёС‡РµСЃС‚РІРѕ СЌР»РµРјРµРЅС‚РѕРІ РІ РЎР”
-  TMemType MemType; // СЂРµР¶РёРј СѓРїСЂР°РІР»РµРЅРёСЏ РїР°РјСЏС‚СЊСЋ
+	PTElem pMem;      // память для СД
+	int MemSize;      // размер памяти для СД
+	int DataCount;    // количество элементов в СД
+	TMemType MemType; // режим управления памятью
 
-  void SetMem(void *p, int Size);             // Р·Р°РґР°РЅРёРµ РїР°РјСЏС‚Рё
+	void SetMem(void *p, int Size);             // задание памяти
 public:
-  virtual ~TDataRoot();
-  TDataRoot(int Size = DefMemSize);
-  virtual bool IsEmpty(void) const;           // РєРѕРЅС‚СЂРѕР»СЊ РїСѓСЃС‚РѕС‚С‹ РЎР”
-  virtual bool IsFull (void) const;           // РєРѕРЅС‚СЂРѕР»СЊ РїРµСЂРµРїРѕР»РЅРµРЅРёСЏ РЎР”
-  virtual void  Put   (const TData &Val) = 0; // РґРѕР±Р°РІРёС‚СЊ Р·РЅР°С‡РµРЅРёРµ
-  virtual TData Get   (void)             = 0; // РёР·РІР»РµС‡СЊ Р·РЅР°С‡РµРЅРёРµ
+	virtual ~TDataRoot();
+	TDataRoot(int Size = DefMemSize);
+	virtual bool IsEmpty(void) const;           // контроль пустоты СД
+	virtual bool IsFull(void) const;           // контроль переполнения СД
+	virtual void  Put(const TData &Val) = 0; // добавить значение
+	virtual TData Get(void) = 0; // извлечь значение
 
-  // СЃР»СѓР¶РµР±РЅС‹Рµ РјРµС‚РѕРґС‹
-  virtual int  IsValid() = 0;                 // С‚РµСЃС‚РёСЂРѕРІР°РЅРёРµ СЃС‚СЂСѓРєС‚СѓСЂС‹
-  virtual void Print()   = 0;                 // РїРµС‡Р°С‚СЊ Р·РЅР°С‡РµРЅРёР№
+								 // служебные методы
+	virtual int  IsValid() = 0;                 // тестирование структуры
+	virtual void Print() = 0;                 // печать значений
 
-  // РґСЂСѓР¶РµСЃС‚РІРµРЅРЅС‹Рµ РєР»Р°СЃСЃС‹
-  friend class TMultiStack;
-  friend class TSuperMultiStack;
-  friend class TComplexMultiStack;
+											  // дружественные классы
+	friend class TMultiStack;
+	friend class TSuperMultiStack;
+	friend class TComplexMultiStack;
 };
-
-#endif
