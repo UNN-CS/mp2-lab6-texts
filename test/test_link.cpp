@@ -1,6 +1,6 @@
 #include "TText.h"
 
-#include <gtest.h>
+#include <gtest/gtest.h>
 
 TEST(TLink, can_create_link)
 {
