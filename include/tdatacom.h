@@ -3,7 +3,6 @@
 #define DataOK   0
 #define DataErr -1
 
-// TDataCom является общим базовым классом
 #define TextOK 0
 #define TextNoDown 101
 #define TextNoNext 102
@@ -20,8 +19,7 @@ protected:
 public:
 	TDataCom() : RetCode(DataOK) {}
 	virtual ~TDataCom() {}
-	int GetRetCode()
-	{
+	int GetRetCode(){
 		int temp = RetCode;
 		RetCode = DataOK;
 		return temp;
